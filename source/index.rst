@@ -44,5 +44,8 @@ The content in this workshop is Licensed under `CC-BY-SA 4.0 <https://creativeco
 Which means that you can use, remix and re-distribute so long attribution to the original
 author is maintained (Tania Allard).
 
+The logo used here was designed by Ashley McNamara for the Microsoft Developer Advocates team use.
+
+
 
 
