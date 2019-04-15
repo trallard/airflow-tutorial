@@ -66,7 +66,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "monokai"
@@ -84,12 +84,17 @@ html_theme = "alabaster"
 # documentation.
 #
 html_theme_options = {
-    "description": "Airflow tutorial",
-    "github_banner": True,
-    "github_button": False,
-    "font_family": "'Roboto', Georgia, sans",
-    "head_font_family": "'Roboto', Georgia, serif",
-    "code_font_family": "'Roboto Mono', 'Consolas', monospace",
+    "github_banner": False,
+    "github_button": True,
+    "github_user": "trallard",
+    "github_repo": "airflow-tutorial",
+    "github_type": "star",
+    "font_family": "'Montserrat', Georgia, sans",
+    "head_font_family": "'Montserrat', Georgia, serif",
+    "code_font_family": "'Montserrat Mono', 'Consolas', monospace",
+    "description": "a.k.a an introduction to all things DAGS and pipelines joy",
+    "show_relbars": True,
+    "logo": "python.png",
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -106,7 +111,15 @@ html_static_path = ["_static"]
 # 'searchbox.html']``.
 #
 # Custom sidebar templates, maps document names to template names.
-html_sidebars = {"**": ["about.html", "navigation.html", "searchbox.html"]}
+html_sidebars = {
+    "**": [
+        "about.html",
+        "localtoc.html",
+        "searchbox.html",
+        "navigation.html",
+        "relations.html",
+    ]
+}
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
