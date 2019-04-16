@@ -16,6 +16,17 @@ div.body h1 {
     font-size: 300%;
 }
 
+div.body h2 {
+    color: #5F6366;
+    font-family: 'Itim', cursive;
+    font-weight: bold;
+}
+div.body h3 {
+    color: #5F6366;
+    font-family: 'Itim', cursive;
+    font-weight: bold;
+}
+
 div.sphinxsidebarwrapper h1.logo {
     text-align: center;
     margin: 0 0 -20px 0;
@@ -65,14 +76,14 @@ th.field-name {
 
 tt, code {
     color: #F8F8F2;
-    background: #015259;
+    background: rgb(48, 46, 58);
     border-radius: 0.3em;
     padding: 0.0em 0.3em;
 }
 
 a.reference.internal code.xref span.pre {
     color: #F8F8F2;
-    background: #015259;
+    background: rgb(48, 46, 58);
     border-bottom: none;
     border-radius: 0;
     padding: 0;
@@ -99,12 +110,12 @@ tt.xref, code.xref, a tt {
 
 code.literal {
     color: #F8F8F2;
-    background: #015259;
+    background:rgb(48, 46, 58);
 }
 
 pre {
     padding: 20px 30px;
-    background: #003038;
+    background: rgb(48, 46, 58);
 }
 
 div > dl {
