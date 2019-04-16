@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Airflow tutorial &#8212; Airflow tutorial  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="airflow-tutorial">
+<h1>Airflow tutorial<a class="headerlink" href="#airflow-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>PyCon US: delivered on the 1st of May 2019.</p>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="about-your-facilitator">
+<h1>About your facilitator<a class="headerlink" href="#about-your-facilitator" title="Permalink to this headline">¶</a></h1>
+<p>My name is Tania. I live in Manchester UK where I work as a
+Cloud Advocate for Microsoft.</p>
+<p>Over the years, I have worked as a data engineer, machine learning engineer,
+and research software engineer. I love data intensive
+enviroments and I am particularly interested in the tools and workflows to
+deliver robust, reproducible data insights.</p>
+<p>If you have any questions or feedback about this tutorial please,
+file an issue using the following link: <a class="reference external" href="https://github.com/trallard/airflow-tutorial/issues/new">https://github.com/trallard/airflow-tutorial/issues/new</a>.</p>
+<p>You can also contact me via the following channels:</p>
+<ul class="simple">
+<li><p>E-mail: <a class="reference external" href="mailto:trallard&#37;&#52;&#48;bitsandchips&#46;me">trallard<span>&#64;</span>bitsandchips<span>&#46;</span>me</a></p></li>
+<li><p>Twitter: <a class="reference external" href="https://twitter.com/ixek">&#64;ixek</a></p></li>
+<li><p><a class="reference external" href="https://github.com/ixek">Tania on GitHub</a></p></li>
+</ul>
+</div>
+<div class="section" id="code-of-conduct">
+<h1>Code of Conduct<a class="headerlink" href="#code-of-conduct" title="Permalink to this headline">¶</a></h1>
+<p>All attendees to this workshop are expected to adhere to PyCon’s Code of Conduct,
+in brief:
+<strong>Be open, considerate, and respectful.</strong></p>
+</div>
+<div class="section" id="license">
+<h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
+<p>The content in this workshop is Licensed under <a class="reference external" href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA 4.0</a>.
+Which means that you can use, remix and re-distribute so long attribution to the original
+author is maintained (Tania Allard).</p>
+<p>The logo used here was designed by Ashley McNamara for the Microsoft Developer Advocates team use.</p>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="#">
+    <img class="logo" src="_static/python.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">a.k.a an introduction to all things DAGS and pipelines joy</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=trallard&repo=airflow-tutorial&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+  <h3><a href="#">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Airflow tutorial</a></li>
+<li><a class="reference internal" href="#about-your-facilitator">About your facilitator</a></li>
+<li><a class="reference internal" href="#code-of-conduct">Code of Conduct</a></li>
+<li><a class="reference internal" href="#license">License</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div><p><iframe src="https://ghbtns.com/github-btn.html?user=trallard&type=follow&count=false" allowtransparency="true"
+        frameborder="0" scrolling="0" width="200" height="20"></iframe></p>
+
+<p><a href="https://twitter.com/ixek" class="twitter-follow-button" data-show-count="false">Follow @ixek</a>
+    <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + '://platform.twitter.com/widgets.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'twitter-wjs');</script>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Tania Allard.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
