@@ -16,7 +16,7 @@ steps:
   inputs:
     versionSpec: '3.7'
     addToPath: true 
-  displayName: 'Using defin~d Python version'
+  displayName: 'Using defined Python version'
 
 - script: |
     python -m pip install --upgrade pip pipenv
@@ -36,7 +36,7 @@ steps:
 - script: |
     cd $(Build.Repository.LocalPath)
     git add --all
-    git commit -m "Build documentation **NO_CI**"
+    git commit -m "Build documentation [skip ci]"
     git push origin HEAD:master
   displayName: 'Publish GitHub Pages'
   condition: |

@@ -43,6 +43,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
     "sphinx.ext.githubpages",
+    "recommonmark",
 ]
 
 # Add any paths that contain templates here, relative to this directory.

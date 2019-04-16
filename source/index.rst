@@ -5,7 +5,14 @@
 
 Airflow tutorial
 ============================================
-PyCon US: delivered on the 1st of May 2019.
+This tutorial was originally developed for PyCon US 2019.
+
+.. toctree::
+   :caption: Table of Contents
+   :hidden:
+   :maxdepth: 2
+
+   setup
 
 
 .. toctree::

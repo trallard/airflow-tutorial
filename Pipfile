@@ -8,6 +8,7 @@ sphinx = "*"
 sphinxcontrib-inlinesyntaxhighlight = "*"
 pylint = "*"
 jinja2 = ">=2.10.1"
+recommonmark = "*"
 
 [packages]
 apache-airflow = "*"
