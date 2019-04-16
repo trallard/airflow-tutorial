@@ -7,9 +7,11 @@ verify_ssl = true
 sphinx = "*"
 sphinxcontrib-inlinesyntaxhighlight = "*"
 pylint = "*"
+jinja2 = ">=2.10.1"
 
 [packages]
 apache-airflow = "*"
+jinja2 = "*"
 
 [requires]
 python_version = "3.7"
