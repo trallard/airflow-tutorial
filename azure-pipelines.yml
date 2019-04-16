@@ -1,29 +1,43 @@
-# Python package
-# Create and test a Python package on multiple Python versions.
-# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/python
+# Publish the docs to GitHub pages
 
+# we only build and publish when changes ocurr to the master branch
 trigger:
 - master
 
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azdevops&tabs=schema#checkout
+- checkout: self
+  persistCredentials: true # set to 'true' to leave the OAuth token in the Git config after the initial fetch
+
+
 pool:
   vmImage: 'Ubuntu-16.04'
-strategy:
-  matrix:
-    Python37:
-      python.version: '3.7'
 
 steps:
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
+    versionSpec: '3.7'
+    addToPath: true 
+  displayName: 'Using defined Python version'
 
 - script: |
     python -m pip install --upgrade pip pipenv
-    pipenv install --dev
+    pipenv install --dev --system --deploy
   displayName: 'Install dependencies via Pipfile'
 
 - script: |
-    sphinx-build -nW -b html -d _build/doctrees . _build/html
-  displayName: 'building docs'
+    sphinx-build -nW -b html -d docs/doctrees . docs/html
+  displayName: 'Building Sphinx docs'
+
+- script: |
+    git config --local user.name "Tania Allard"
+    git config --local user.email "trallard@bitsandchips.me"
+    git add docs/* 
+    git commit -m "Build documentation **NO_CI**"
+  displayName: 'Commit latest docs build $(Build.SourceVersion)'
+
+- script: |
+    git push origin HEAD:master
+  displayName: 'Publish GitHub Pages'
+  condition: |
+    and(not(eq(variables['Build.Reason'], 'PullRequest')),
+        eq(variables['Build.SourceBranch'], 'refs/heads/master'))
