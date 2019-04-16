@@ -2,17 +2,16 @@
 
 # we only build and publish when changes ocurr to the master branch
 trigger:
-- master
-
-# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azdevops&tabs=schema#checkout
-- checkout: self
-  persistCredentials: true # set to 'true' to leave the OAuth token in the Git config after the initial fetch
-
+- development
 
 pool:
   vmImage: 'Ubuntu-16.04'
 
 steps:
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azdevops&tabs=schema#checkout
+- checkout: self
+  persistCredentials: true # set to 'true' to leave the OAuth token in the Git config after the initial fetch
+
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '3.7'
@@ -25,17 +24,19 @@ steps:
   displayName: 'Install dependencies via Pipfile'
 
 - script: |
-    sphinx-build -nW -b html -d docs/doctrees . docs/html
+    sphinx-build -nW -b html -d $(Build.ArtifactStagingDirectory)'/doctrees . $(Build.ArtifactStagingDirectory)'/html
   displayName: 'Building Sphinx docs'
 
 - script: |
     git config --local user.name "Tania Allard"
     git config --local user.email "trallard@bitsandchips.me"
-    git add docs/* 
-    git commit -m "Build documentation **NO_CI**"
-  displayName: 'Commit latest docs build $(Build.SourceVersion)'
+    cp -a $(Build.ArtifactStagingDirectory)/. $(Build.Repository.LocalPath)/docs
+  displayName: 'Copy artifacts to clean branch'
 
 - script: |
+    cd $(Build.Repository.LocalPath)
+    git add --all
+    git commit -m "Build documentation **NO_CI**"
     git push origin HEAD:master
   displayName: 'Publish GitHub Pages'
   condition: |
