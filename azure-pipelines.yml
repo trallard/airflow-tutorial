@@ -2,7 +2,7 @@
 
 # we only build and publish when changes ocurr to the master branch
 trigger:
-- development
+- master
 
 pool:
   vmImage: 'Ubuntu-16.04'
