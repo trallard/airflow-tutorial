@@ -16,7 +16,7 @@ steps:
   inputs:
     versionSpec: '3.7'
     addToPath: true 
-  displayName: 'Using defined Python version'
+  displayName: 'Using defin~d Python version'
 
 - script: |
     python -m pip install --upgrade pip pipenv
@@ -24,13 +24,13 @@ steps:
   displayName: 'Install dependencies via Pipfile'
 
 - script: |
-    sphinx-build -nW -b html -d $(Build.ArtifactStagingDirectory)'/doctrees . $(Build.ArtifactStagingDirectory)'/html
+    sphinx-build -n -b html ./source $(Build.ArtifactStagingDirectory)/build/html
   displayName: 'Building Sphinx docs'
 
 - script: |
     git config --local user.name "Tania Allard"
     git config --local user.email "trallard@bitsandchips.me"
-    cp -a $(Build.ArtifactStagingDirectory)/. $(Build.Repository.LocalPath)/docs
+    cp -a $(Build.ArtifactStagingDirectory)/build/html/ $(Build.Repository.LocalPath)/docs
   displayName: 'Copy artifacts to clean branch'
 
 - script: |
