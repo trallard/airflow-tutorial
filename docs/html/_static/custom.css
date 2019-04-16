@@ -1,7 +1,5 @@
 /*  */
-@import url('https://fonts.googleapis.com/css?family=Itim|Montserrat');
-
-@import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono|Itim');
+@import url('https://fonts.googleapis.com/css?family=Itim|Montserrat|Roboto+Mono');
 
 a {
     color: rgb(96, 138, 197);
@@ -26,6 +24,13 @@ div.sphinxsidebarwrapper h1.logo {
 div.sphinxsidebar p.blurb {
     font-size: 130%;
     text-align: center;
+    font-family: 'Itim', cursive;
+    color: rgb(151, 139, 196);
+}
+
+div.sphinxsidebar h1{
+    font-size: 160%;
+    color: #5F6366;
     font-family: 'Itim', cursive;
 }
 
@@ -115,7 +120,7 @@ dt {
 div.footer::before {
     display: block;
     content: '';
-    border-top: 1px solid #EDB5BF;
+    border-top: 2px solid #EDB5BF;
     width: 50%;
     margin: 2em auto 2em auto;
 }
@@ -126,7 +131,7 @@ div.footer {
 }
 
 div.footer a {
-    /* color: #027bab; */
+    color: #027bab;
     text-decoration: none;
 }
 
@@ -141,9 +146,11 @@ div.footer a {
         color: #1bc5e0;
     }
     div.sphinxsidebar a {
-        color: rgb(151, 139, 196);
+        /* color: rgb(151, 139, 196); */
+        color: white;
     }
     div.sphinxsidebar ul {
-        color: rgb(151, 139, 196);
+        /* color: rgb(151, 139, 196); */
+        color: white;
     }
 }
