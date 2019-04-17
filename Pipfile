@@ -7,12 +7,14 @@ verify_ssl = true
 sphinx = "*"
 sphinxcontrib-inlinesyntaxhighlight = "*"
 pylint = "*"
-jinja2 = ">=2.10.1"
 recommonmark = "*"
 
 [packages]
-apache-airflow = "*"
-jinja2 = "*"
+jupyter = "*"
+jupyterlab = "*"
+papermill = "*"
 
 [requires]
 python_version = "3.7"
+
+
