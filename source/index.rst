@@ -13,6 +13,7 @@ This tutorial was originally developed for PyCon US 2019.
    :maxdepth: 2
 
    setup
+   about
    pipelines
    airflow-intro
 

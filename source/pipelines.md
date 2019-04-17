@@ -1,4 +1,4 @@
-# Data pipelines
+# It all starts with automation
 
 <figure class="image">
   <img src="https://imgs.xkcd.com/comics/data_pipeline.png">
@@ -17,5 +17,18 @@ Roughly this is how all pipelines look like:
 - The complexity of the data sources and demands increase every day
 - A lot of time is invested in writing, monitoring jobs, and troubleshooting issues.
 
-### Good data pipelines
+### Good data pipelines are:
+- reproducible
+- easy to productise
 
+![](_static/gooddata.png)
+
+![](_static/gooddata1.png)
+
+
+
+# You need a workflow manager
+
+Think:
+
+GNU Make + Unix pipes + Steroids

@@ -1,5 +1,5 @@
 /*  */
-@import url('https://fonts.googleapis.com/css?family=Itim|Montserrat|Roboto+Mono');
+@import url('https://fonts.googleapis.com/css?family=Itim|Nunito|PT+Mono');
 
 a {
     color: rgb(96, 138, 197);
@@ -76,14 +76,14 @@ th.field-name {
 
 tt, code {
     color: #F8F8F2;
-    background: rgb(70, 66, 88);
+    background: #1d1941;
     border-radius: 0.3em;
     padding: 0.0em 0.3em;
 }
 
 a.reference.internal code.xref span.pre {
     color: #F8F8F2;
-    background: rgb(70, 66, 88);
+    background: #1d1941;
     border-bottom: none;
     border-radius: 0;
     padding: 0;
@@ -110,12 +110,12 @@ tt.xref, code.xref, a tt {
 
 code.literal {
     color: #F8F8F2;
-    background:rgb(70, 66, 88);
+    background:#1d1941;
 }
 
 pre {
     padding: 20px 30px;
-    background: rgb(70, 66, 88);
+    background: #1d1941;
 }
 
 div > dl {
@@ -144,6 +144,12 @@ div.footer {
 div.footer a {
     color: #027bab;
     text-decoration: none;
+}
+
+p.caption {
+    font-family: 'Itim', cursive;
+    font-size: inherit;
+    font-size: 150%;
 }
 
 @media screen and (max-width: 875px) {
