@@ -177,9 +177,9 @@ p.caption {
 
 .alert {
   position: relative;
-  padding: 1px;
+  padding: 10px;
   margin-bottom: 5px;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   border-radius: 2px;
 }
 
@@ -189,7 +189,7 @@ p.caption {
     border-color: #b8daff;
 }
 .alert-custom {
-    color: rgb(151, 139, 196);
-    background-color: rgb(128, 117, 165);
-    border-color: rgb(128, 117, 165);
+    background-color: rgb(229, 224, 247);
+    border-color:rgb(229, 224, 247);
+    color: rgb(128, 117, 165);
 }

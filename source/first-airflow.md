@@ -1,8 +1,7 @@
-# Airflow 101
-
-## Getting Airflow set up on your local computer 
+# Airflow 101: working locally and familiarise with the tool
 
 ### Pre-requisites
+
 The following prerrequisites are needed:
 
 - Libraries detailed in the Setting up section (either via conda or pipenv)
@@ -10,49 +9,68 @@ The following prerrequisites are needed:
   
 ## Getting your environment up and running
 
-If you followed the instructions you should have Airflow installed. So let's get our environment up and running:
+If you followed the instructions you should have Airflow installed as well as the rest of the packages we will be using. 
+
+So let's get our environment up and running:
 
 If you are using conda start your environment via:
 ```
-source activate airflow-env
+$ source activate airflow-env
 ```
-
 If using pipenv then:
 ```
-pipenv shell
+$ pipenv shell
 ````
-this will start a shell within a virtual environment.
 
+this will start a shell within a virtual environment, to exit the shell you need to type `exit` and this will exit the virtual environment.
 
+## Starting Airflow locally
 
-Airflow home lives in `~/airflow` by default, but you can change the location of this. From the command line:
+Airflow home lives in `~/airflow` by default, but you can change the location before installing airflow. You first need to set the `AIRFLOW_HOME` environment variable and then install airflow. For example using pip:
 
-```
-export AIRFLOW_HOME=~/airflow
+```sh
+export AIRFLOW_HOME=~/mydir/airflow
 
 # install from pypi using pip
 pip install apache-airflow
 ```
 
-you should see something like this in the `airflow` dir:
+once you have completed the installation you should see something like this in the `airflow` directory (wherever it lives for you)
 
 ```
-drwxr-xr-x    - tania 18 Apr 14:02 .
-.rw-r--r--  26k tania 18 Apr 14:02 ├── airflow.cfg
-drwxr-xr-x    - tania 18 Apr 14:02 ├── logs
-drwxr-xr-x    - tania 18 Apr 14:02 │  └── scheduler
-drwxr-xr-x    - tania 18 Apr 14:02 │     ├── 2019-04-18
-lrwxr-xr-x   46 tania 18 Apr 14:02 │     └── latest -> /Users/tania/airflow/logs/scheduler/2019-04-18
-.rw-r--r-- 2.5k tania 18 Apr 14:02 └── unittests.cfg
+drwxr-xr-x    - myuser 18 Apr 14:02 .
+.rw-r--r--  26k myuser 18 Apr 14:02 ├── airflow.cfg
+drwxr-xr-x    - myuser 18 Apr 14:02 ├── logs
+drwxr-xr-x    - myuser 18 Apr 14:02 │  └── scheduler
+drwxr-xr-x    - myuser 18 Apr 14:02 │     ├── 2019-04-18
+lrwxr-xr-x   46 myuser 18 Apr 14:02 │     └── latest -> /Users/myuser/airflow/logs/scheduler/2019-04-18
+.rw-r--r-- 2.5k myuser 18 Apr 14:02 └── unittests.cfg
 ```
 
-the next thing to do is run
+As your project evolve, your directory will look something like this"
+
+```
+airflow                  # the root directory.
+├── dags                 # root folder for all dags. files inside folders are not searched for dags.
+│   ├── my_dag.py        # my dag (definitions of tasks/operators) including precedence.
+│   └── ...
+├── logs                 # logs for the various tasks that are run
+│   └── my_dag           # DAG specific logs
+│   │   ├── src1_s3      # folder for task specific logs (log files are created by date of run)
+│   │   ├── src2_hdfs
+│   │   ├── src3_s3
+│   │   └── spark_task_etl
+├── airflow.db           # SQLite database used by Airflow internally to track status of each DAG.
+├── airflow.cfg          # global configuration for Airflow (this can be overriden by config inside the file.)
+└── ...
+```
+
+The next thing to do is run
 ` airflow initdb` this will initialize your database via alembic so that it matches the latest Airflow release.
-This database will be used to track what has as has not been completed.
+This database will be used to track the status of the DAGS and tasks.
 
-Let's edit the `airflow.config` document since Airflow uses `sqlite` databes which is normally outgrown very quickly as you cannot parallelize tasks using this database.
+Remember that Airflow uses `sqlite` database, which means you cannot parallelize tasks using this database. Since we have mysql and mysqlclient installed we will use these now on.
 
-By now you should have `mysql` installed and `mysqlclient` installed.
 
 Let's now start the webserver locally:
 
@@ -96,3 +114,42 @@ airflow test tutorial print_date 2019-05-01
 airflow test tutorial templated 2019-05-01
 ```
 By using the test commands theese are not saved in the database.
+
+Now let's start the scheduler:
+```
+airflow scheduler
+```
+and now with the scheduler up and running we can trigger an instance:
+```
+$ airflow run airflow run example_bash_operator runme_0 2015-01-01
+```
+
+This will be stored in the database and you can see the  change of the status change straight away.
+
+What would happen for example if we wanted to run  or trigger the `tutorial` task? 🤔
+
+Let's try from the UI and see what happens.
+
+```
+airflow trigger_dag tutorial
+```
+
+
+## Writing your first DAG
+
+Let's create our first simple DAG. 
+Inside the dag directory (`~/airflow/dags)` create a `simple_dag.py` file.
+
+And let's start by importing the needed libraries:
+
+```python
+# airflow related
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.operators.bash_operator import BashOperator
+# other packages
+from datetime import datetime
+from datetime import timedelta
+```
+
+Next we need to set the defaults:

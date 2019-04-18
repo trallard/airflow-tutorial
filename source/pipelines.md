@@ -25,6 +25,7 @@ It is good to start with a checklist:
 - What (if anything) should happen after the task concludes?
 
 <div class="alert alert-primary">
+  <h4> Top tip </h4>
   If your project is too large or loosely defined, try breaking it up into smaller tasks and automate a few of those tasks. Perhaps your task involves a report which downloads two datasets, runs cleanup and analysis, and then sends the results to different groups depending on the outcome. You can break this task into subtasks, automating each step. If any of these subtasks fail, stop the chain and alert the whoever is responsible for maintaining the script so it can be investigated further.
 </div>
 
@@ -51,6 +52,8 @@ Roughly this is how all pipelines look like:
 
  You need a workflow manager
 
+<div class="alert alert-custom">
 Think:
 
 GNU Make + Unix pipes + Steroids
+</div>

@@ -7,6 +7,7 @@ We will be taking a look at the basic concepts of data pipelines as well as prac
 - Be able to apply what we learn and adopt to your use cases
 - Interested in data and systems
 - Aspring or current data engineering
+- Some knowledge about systems and databases (enough to be dangerous)
 
 ## Our focus for the day
 - Greater understanding on how to apply data pipelines using the Python toolset

@@ -13,8 +13,9 @@ recommonmark = "*"
 jupyter = "*"
 jupyterlab = "*"
 papermill = "*"
-apache-airflow = {extras = ["slack"],version = "*"}
+apache-airflow = {extras = ["mysql", "slack"],version = "*"}
 mysqlclient = "*"
+celery = "*"
 
 [requires]
 python_version = "3.7"
