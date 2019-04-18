@@ -14,3 +14,14 @@ We will be taking a look at the basic concepts of data pipelines as well as prac
 - Apply knowledge with each library
 - Will give you the building blocks
 
+## Keeping on track
+
+You will find 🚦 across the tutorial examples. We will use this to identify how folks are doing over the workshop (if following along in person). 
+Place the post it as follows:
+
+🚦 Purple postit: all good, task has been completed
+
+🚦 Yellow postit: I need extra time or need help with the task in hand
+
+
+

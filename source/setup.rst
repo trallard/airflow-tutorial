@@ -76,6 +76,8 @@ We will be using the following libraries:
 - pandas
 - azure-cli
 - matplotlib
+- mysqlclient
+
 
 If you are using Anaconda you can use this `environment.yaml` and install the 
 dependencies via ``conda env create -f environment.yml``.
@@ -86,3 +88,6 @@ Finally you can install the libraries via pip `pip install -r requirements.txt`
 
 Please make sure to install all the dependencies before the tutorial as the WiFi 
 at the conferences venue cannot always be trusted.
+
+
+Note that you will need to have mysql up an running, please refer to `https://github.com/PyMySQL/mysqlclient-python<https://github.com/PyMySQL/mysqlclient-python>`_.

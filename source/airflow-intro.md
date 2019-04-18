@@ -1,4 +1,4 @@
-# Introduction to Airflow
+# Airflow basics
 
 ## What is Airflow?
 
@@ -114,3 +114,4 @@ run_this = PythonOperator(
     dag=dag,
 )
 ```
+

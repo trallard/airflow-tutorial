@@ -13,8 +13,8 @@ recommonmark = "*"
 jupyter = "*"
 jupyterlab = "*"
 papermill = "*"
+apache-airflow = {extras = ["slack"],version = "*"}
+mysqlclient = "*"
 
 [requires]
 python_version = "3.7"
-
-

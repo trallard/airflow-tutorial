@@ -171,3 +171,25 @@ p.caption {
         color: white;
     }
 }
+
+
+/* other */
+
+.alert {
+  position: relative;
+  padding: 1px;
+  margin-bottom: 5px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+}
+
+.alert-primary {
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+}
+.alert-custom {
+    color: rgb(151, 139, 196);
+    background-color: rgb(128, 117, 165);
+    border-color: rgb(128, 117, 165);
+}
