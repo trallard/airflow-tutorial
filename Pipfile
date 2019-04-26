@@ -16,6 +16,7 @@ papermill = "*"
 apache-airflow = {extras = ["celery"],version = "*"}
 celery = "*"
 mysqlclient = "*"
+tweepy = "*"
 
 [requires]
 python_version = "3.7"
