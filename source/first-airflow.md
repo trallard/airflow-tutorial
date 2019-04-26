@@ -5,7 +5,9 @@
 The following prerrequisites are needed:
 
 - Libraries detailed in the Setting up section (either via conda or pipenv)
-- mysql installed and running
+- mysql installed
+- text editor
+- command line
   
 ## Getting your environment up and running
 
@@ -46,8 +48,13 @@ drwxr-xr-x    - myuser 18 Apr 14:02 │     ├── 2019-04-18
 lrwxr-xr-x   46 myuser 18 Apr 14:02 │     └── latest -> /Users/myuser/airflow/logs/scheduler/2019-04-18
 .rw-r--r-- 2.5k myuser 18 Apr 14:02 └── unittests.cfg
 ```
+We need to create a local dag folder:
 
-As your project evolve, your directory will look something like this"
+```
+mkdir ~/airflow/dags
+```
+
+As your project evolve, your directory will look something like this:
 
 ```
 airflow                  # the root directory.
@@ -65,12 +72,44 @@ airflow                  # the root directory.
 └── ...
 ```
 
-The next thing to do is run
-` airflow initdb` this will initialize your database via alembic so that it matches the latest Airflow release.
-This database will be used to track the status of the DAGS and tasks.
+## Prepare your database
 
-Remember that Airflow uses `sqlite` database, which means you cannot parallelize tasks using this database. Since we have mysql and mysqlclient installed we will use these now on.
+As we mentioned before Airflow uses a database to keep track of the tasks and their statuses. So it is critical to have one set up.
 
+To start the default database we can run
+` airflow initdb`. This will initialize your database via alembic so that it matches the latest Airflow release.
+
+The default database used is `sqlite` which means you cannot parallelize tasks using this database. Since we have mysql and mysqlclient installed we will set them up so that we can use them with airflow.
+
+🚦Create an airflow database
+
+From the command line:
+
+```
+mysql -u root -p
+mysql> CREATE DATABASE airflow CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+mysql> create user 'airflow'@'localhost' identified by 'airflow';
+mysql> grant all privileges on * . * to 'airflow'@'localhost';
+mysql> flush privileges;
+```
+and inititalize the database:
+
+```
+airflow initdb
+```
+
+## Update your local configuration
+
+Open your airflow configuration file `~/airflow/airflow.cf` and make the following changes;
+
+```
+executor = CeleryExecutor
+sql_alchemy_conn = mysql://airflow:airflow@localhost:3306/airflow
+broker_url = amqp://guest:guest@localhost:5672/
+```
+
+Here we are replacing the default executor (`SequentialExecutor`) with the `CeleryExecutor` so that we can run multiple DAGs in parallel.
+We also replace the default `sqlite` database with our newly created `
 
 Let's now start the webserver locally:
 
