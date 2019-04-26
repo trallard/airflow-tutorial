@@ -1,8 +1,9 @@
 # About the workshop
 
-We will be taking a look at the basic concepts of data pipelines as well as practical use cases using Python.
+We will be taking a look at the basic concepts of data pipelines as well as practical use cases using Python. 
 
 ## About you:
+- Some experience using the command line
 - Intermediate Python knowledge / use
 - Be able to apply what we learn and adopt to your use cases
 - Interested in data and systems
@@ -23,6 +24,3 @@ Place the post it as follows:
 🚦 Purple postit: all good, task has been completed
 
 🚦 Yellow postit: I need extra time or need help with the task in hand
-
-
-

@@ -164,4 +164,32 @@ Now you can install the packages using via pip ``pip install -r requirements.txt
 To leave the virtual environment run ``deactivate``
 
 
+Twitter and twitter developer account
+++++++++++++++++++++++++++++++++++++++
 
+This tutorial uses the Twitter API for some examples and to build some of the pipelines included.
+
+Please make sure to follow the next steps to get you all set up.
+
+1. Create an account at `https://twitter.com/ <https://twitter.com/>`_. 
+
+2. Next you will need to apply for a developer account, head to `https://developer.twitter.com/en/apply <https://developer.twitter.com/en/apply>`_.
+    You will need to provide detailed information about what you want to use the API for. 
+    Make sure to complete all the steps and confirm your email address so that you can be notified about the status of your application.
+
+3. Once your application has been approved you will need to go to `https://developer.twitter.com/en/apps <https://developer.twitter.com/en/apps>`_ login with your details (they should be the same as your Twitter account ones).
+
+4. On your app dashboard click on the create an app button
+    .. image:: _static/twitter1.png
+    Make sure to give it a descriptive name, something like ``airflow-tutorial`` or the such
+
+5. Once you complete the details and create your new app you should be able to access it via the main app dashboard. Click on deatils button next to the app name and head over to permissions.
+We only need read permissions for the tutorial, so these should look something like this
+    .. image:: _static/twitter2.png
+
+6. Now if you click on the Keys and tokens you will be able to see a set of an API key, an API secret, an Access token and an Access secret
+    .. image :: _static/twitter3.png
+    They are only valid for the permissions you specified before. Keep a record of these in a safe place as we will 
+    need them for the Airflow pipelines.
+
+    

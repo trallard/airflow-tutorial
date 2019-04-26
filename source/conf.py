@@ -92,7 +92,7 @@ html_theme_options = {
     "github_type": "star",
     "font_family": "Nunito, Georgia, sans",
     "head_font_family": "Nunito, Georgia, serif",
-    "code_font_family": "PT Mono', 'Consolas', monospace",
+    "code_font_family": "'Source Code Pro', 'Consolas', monospace",
     "description": "a.k.a an introduction to all things DAGS and pipelines joy",
     "show_relbars": True,
     "logo": "python.png",
