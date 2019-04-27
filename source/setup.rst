@@ -50,63 +50,102 @@ Text editors are tools with powerful features designed to optimize writing code.
 There are several text editors that you can choose from.
 Here are some we recommend:
 
-- `VS code <https://code.visualstudio.com//?wt.mc_id=pyconCZ-github-taallard>`_: this is your facilitator's favourite 💜 and it is worth trying if you have not checked it yet
+- `VS code <https://code.visualstudio.com//?wt.mc_id=PyCon-github-taallard>`_: this is your facilitator's favourite 💜 and it is worth trying if you have not checked it yet
 - `Pycharm <https://www.jetbrains.com/pycharm/download/>`_
 - `Atom <https://atom.io>`_
 
 We suggest trying several editors before settling on one.
 
 If you decide to go for VSCode make sure to also
-have the `Python extension <https://marketplace.visualstudio.com/itemdetails?itemName=ms-python.python/&wt.mc_id=PyCon-github-taallard>`_
+have the `Python extension <https://marketplace.visualstudio.com/itemdetails?itemName=ms-python.python&wt.mc_id=PyCon-github-taallard>`_
 installed. This will make your life so much easier (and it comes with a lot of nifty
 features 😎).
 
 
-Azure
+Microsoft Azure
 +++++
 
 You will need to get an Azure account as we will be using this to deploy the 
 Airflow instance.
 
+.. note:: If you are doing this tutorial live at PyCon US then your
+    facilitator will provide you with specific instructions to set up your Azure 
+    subscription. If you have not received these please let your facilitator know ASAP.
+
 Follow `this link <https://azure.microsoft.com/en-us/free//?wt.mc_id=PyCon-github-taallard>`_ 
 to get an Azure free subscription. This will give you 150 dollars in credit so you
-can get started.
+can get started getting things up and experimenting with Azure and Airflow.
 
-If you are doing this tutorial live at PyCon US then your
-facilitator will provide you with specific instructions to set up your Azure 
-subscription. If you have not received these please let your facilitator know ASAP.
 
 MySQL
 ++++++
-
+MySQL is one of the most popular databases used/
 We need MySQL to follow along the tutorial. Make sure to install it beforehand.
 
-Note that you will need to have mysql up an running, please refer to 
-`https://github.com/PyMySQL/mysqlclient-python <https://github.com/PyMySQL/mysqlclient-python>`_
-for more details on how to get `mysql` running.
+.. We are going to install mysql later on             
+.. `https://github.com/PyMySQL/mysqlclient-python <https://github.com/PyMySQL/mysqlclient-python>`_
+.. for more details on how to get `mysql` running.
 
-.. warning:: There are some issues with MySQL and the Python library in Mac so I have found that this gist has some valuable information on getting MYSQL up and running on Mac: `https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e <https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e>`_.
+Mac users
+------------------
+
+.. warning:: 
+    There are some known issues with MySQL in Mac so we recommend using this approach to install and set MySQL up: `https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e <https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e>`_.
 
 Also note that you will need to make sure that openssl is on your path so make sure this is added accordingly:
-If using ``zshrc``:
+If using ``zsh``:
 ::
     echo 'export PATH="/usr/local/opt/openssl/bin:$PATH"' >> ~/.zshrc
 
+If using ``bash``:
+::
+    echo 'export PATH="/usr/local/opt/openssl/bin:$PATH"' >> ~/.bashrc
 
-If even after folllowing these instructions you are getting compilation errors while installing 
-`mysqlclient` on Mac try this:
+make sure to reload using ``source ~/.bashrc`` or ``source ~/.zshrc``
+
+Troubleshooting
+~~~~~~~~~~~~~~~~~
+
+Later on during the setup you will be installing ``mysqlclient``. 
+If during the process you get compilation errors
+try the following:
 ::
     env LDFLAGS="-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib" pip install mysqlclient
 
-Next, you have to install ``mysql.connector``, use `this link <https://dev.mysql.com/downloads/connector/python/>`_ to get the 
-library for your OS. We need `mysql.connector` to connect Python and the MySQL databases.
-
-To check that this has been properly installed try running the following from the Python REPL
+if you want to be safe before installing the library we recommend you set the following env variables:
 ::
-    import mysql.connector
+    export LDFLAGS="-L/usr/local/opt/openssl/lib"
+    export CPPFLAGS="-I/usr/local/opt/openssl/include"
 
+Windows users
+---------------
 
+Download and install MySQL from the official website `https://dev.mysql.com/downloads/installer/ <https://dev.mysql.com/downloads/installer/>`_ and execute it.
+For additional configuration and pre-requisites make sure to visit the official `MySQL docs <https://dev.mysql.com/doc/refman/8.0/en/windows-installation.html>`_.
 
+Linux users 
+-----------------
+You can install the Python and MySQL headers and libraries like so:
+
+Debian/Ubuntu:
+::
+    sudo apt-get install python3-dev default-libmysqlclient-dev
+
+Red Hat / Centos
+::
+    sudo yum install python3-devel mysql-devel
+
+After installation you need to start the service with:
+::
+    systemctl start mysql 
+
+To ensure that the database launches after a reboot:
+::  
+    systemctl enable mysql
+
+You should now be able to start the mysql shell through ``/usr/bin/mysql -u root -p``
+you will be asked for the password you set during installation.
+    
 Creating a virtual environment
 +++++++++++++++++++++++++++++++
 
@@ -134,7 +173,7 @@ Create a directory for the tutorial, for example:
 ::
     mkdir airflow-tutorial 
 
-and go to it (``cd airflow-tutorial``).
+and change your working directory to this newly created one ``cd airflow-tutorial``.
 
 Once then save this `Pipfile` and install via ``pipenv install``.
 This will install the dependencies, this might take a while so you can make yourself a brew in the meantime.
