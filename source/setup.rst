@@ -276,7 +276,7 @@ Azure Pass account
 As a PyCon attendee, you will be issued with an Azure pass worth 200 dollars with a 90 days validity.
 You will not need to add credit card details to activate but you will need to follow this process to redeem your credits.
 
-1. Email your facilitator at trallard@bitsandchips.me, they will send you an email with a `unique` code to redeem. Please do not share with anyone, 
+1. Send an email your facilitator at trallard@bitsandchips.me with the subject line ``Airflow PyCon- Azure Pass``, they will send you an email with a `unique` code to redeem. Please do not share with anyone, 
 this is a single-use pass and once activated it will be invalid.
 
 2. Go to `this site <https://www.microsoftazurepass.com/?wt.mc_id=PyCon-github-taallard>`_ to redeem your pass. 
