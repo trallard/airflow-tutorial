@@ -7,12 +7,22 @@ verify_ssl = true
 sphinx = "*"
 sphinxcontrib-inlinesyntaxhighlight = "*"
 pylint = "*"
-jinja2 = ">=2.10.1"
 recommonmark = "*"
 
 [packages]
-apache-airflow = "*"
-jinja2 = "*"
+jupyter = "*"
+jupyterlab = "*"
+papermill = "*"
+apache-airflow = {extras = ["celery", "kubernetes", "mysql", "password", "slack"],version = "*"}
+celery = "*"
+mysqlclient = "*"
+tweepy = "*"
+numpy = "*"
+pandas = "*"
+hypothesis = "*"
+matplotlib = "*"
+seaborn = "*"
+mysql-connector-python = "*"
 
 [requires]
 python_version = "3.7"
