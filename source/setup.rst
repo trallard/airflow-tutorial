@@ -159,7 +159,9 @@ Anaconda
 
 If you are using Anaconda first you will need to make a directory for the tutorial, for example ``mkdir airflow-tutorial``.
 Once created make sure to change into it using ``ch airflow-tutorial``.
-Next, make a copy of this `environment.yaml` and install the 
+
+Next, make a copy of this `environment.yaml <https://raw.githubusercontent.com/trallard/airflow-tutorial/master/environment.yaml>`_
+ and install the 
 dependencies via ``Conda env create -f environment.yml``.
 Once all the dependencies are installed you can activate your environment through the following commands 
 ::
@@ -179,7 +181,8 @@ Create a directory for the tutorial, for example:
 
 and change your working directory to this newly created one ``cd airflow-tutorial``.
 
-Once then make a copy of this `Pipfile` and install via ``pipenv install``.
+Once then make a copy of this `Pipfile <https://raw.githubusercontent.com/trallard/airflow-tutorial/master/Pipfile>`_ 
+in your new directory and install via ``pipenv install``.
 This will install the dependencies you need. This might take a while so you can make yourself a brew in the meantime.
 
 Once all the dependencies are installed you can run ``pipenv shell`` which will start a session with the correct virtual environment activated. To exit the shell session using ``exit``.
@@ -201,6 +204,8 @@ Before installing the required packages you need to activate your virtual enviro
     source env/bin/activate # Mac and Linux 
     .\env\Scripts\activate  # Windows 
 
+Make a copy of `this requirements file <https://raw.githubusercontent.com/trallard/airflow-tutorial/master/requirements.txt>`_ 
+in your new directory.
 Now you can install the packages using via pip ``pip install -r requirements.txt``
 
 To leave the virtual environment run ``deactivate``
