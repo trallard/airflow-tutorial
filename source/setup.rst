@@ -6,7 +6,7 @@ can get quite slow when having too many people downloading and installing things
 time.
 
 Make sure to follow all the steps as detailed here especially :ref:`attendees`
-as there are specific details for the PyCon setup that need to be done in advance. 
+as there are specific details for the PyCon setup that needs to be done in advance. 
 
 Python 3.x
 ++++++++++
@@ -21,7 +21,7 @@ provides a variety of useful packages/tools.
 To download Anaconda, follow the link https://www.anaconda.com/download/ and select
 Python 3. Following the download, run the installer as per usual on your machine.
 
-If you prefere not using Anaconda then this `tutorial <https://realpython.com/installing-python/>`_ can help you with the installation and 
+If you prefer not using Anaconda then this `tutorial <https://realpython.com/installing-python/>`_ can help you with the installation and 
 setup.
 
 If you already have Python installed but not via Anaconda do not worry.
@@ -72,8 +72,7 @@ You will need to get an Azure account as we will be using this to deploy the
 Airflow instance.
 
 .. note:: If you are doing this tutorial live at PyCon US then your
-    facilitator will provide you with specific instructions to set up your Azure 
-    subscription. If you have not received these please let your facilitator know ASAP.
+    facilitator will provide you with specific instructions to set up your Azure subscription. If you have not received these please let your facilitator know ASAP.
 
 Follow `this link <https://azure.microsoft.com/en-us/free//?wt.mc_id=PyCon-github-taallard>`_ 
 to get an Azure free subscription. This will give you 150 dollars in credit so you
@@ -83,9 +82,9 @@ can get started getting things up and experimenting with Azure and Airflow.
 MySQL
 ++++++
 MySQL is one of the most popular databases used/
-We need MySQL to follow along the tutorial. Make sure to install it beforehand.
+We need MySQL to follow along with the tutorial. Make sure to install it beforehand.
 
-.. We are going to install mysql later on             
+.. We are going to install MySQL later on             
 .. `https://github.com/PyMySQL/mysqlclient-python <https://github.com/PyMySQL/mysqlclient-python>`_
 .. for more details on how to get `mysql` running.
 
@@ -95,10 +94,10 @@ Mac users
 .. warning:: 
     There are some known issues with MySQL in Mac so we recommend using this approach to install and set MySQL up: `https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e <https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e>`_.
 
-Also note that you will need to make sure that openssl is on your path so make sure this is added accordingly:
+Also, note that you will need to make sure that OpenSSL is on your path to make sure this is added accordingly:
 If using ``zsh``:
 ::
-    echo 'export PATH="/usr/local/opt/openssl/bin:$PATH"' >> ~/.zshrc
+    echo 'export PATH="/usr/local/opt/OpenSSL/bin:$PATH"' >> ~/.zshrc
 
 If using ``bash``:
 ::
@@ -109,7 +108,7 @@ make sure to reload using ``source ~/.bashrc`` or ``source ~/.zshrc``
 Troubleshooting
 ~~~~~~~~~~~~~~~~~
 
-Later on during the setup you will be installing ``mysqlclient``. 
+Later on, during the setup,, you will be installing ``mysqlclient``. 
 If during the process you get compilation errors
 try the following:
 ::
@@ -160,9 +159,11 @@ Anaconda
 
 If you are using Anaconda first you will need to make a directory for the tutorial, for example ``mkdir airflow-tutorial``.
 Once created make sure to change into it using ``ch airflow-tutorial``.
-Next, make a copy of this `environment.yaml` and install the 
-dependencies via ``conda env create -f environment.yml``.
-Once all the dependencies are installed you can activate your environment through the follwing commands 
+
+Next, make a copy of this `environment.yaml <https://raw.githubusercontent.com/trallard/airflow-tutorial/master/environment.yaml>`_
+ and install the 
+dependencies via ``Conda env create -f environment.yml``.
+Once all the dependencies are installed you can activate your environment through the following commands 
 ::
     source activate airflow-env # Mac
     activate airflow-env        # Windows and Linux
@@ -180,11 +181,11 @@ Create a directory for the tutorial, for example:
 
 and change your working directory to this newly created one ``cd airflow-tutorial``.
 
-Once then make a copy of this `Pipfile` and install via ``pipenv install``.
+Once then make a copy of this `Pipfile <https://raw.githubusercontent.com/trallard/airflow-tutorial/master/Pipfile>`_ 
+in your new directory and install via ``pipenv install``.
 This will install the dependencies you need. This might take a while so you can make yourself a brew in the meantime.
 
-Once all the dependencies are installed you can run ``pipenv shell`` which will start a session with the correct virtual environment 
-activated. To exit the shell session use ``exit``.
+Once all the dependencies are installed you can run ``pipenv shell`` which will start a session with the correct virtual environment activated. To exit the shell session using ``exit``.
 
 virtualenv
 -----------
@@ -203,6 +204,8 @@ Before installing the required packages you need to activate your virtual enviro
     source env/bin/activate # Mac and Linux 
     .\env\Scripts\activate  # Windows 
 
+Make a copy of `this requirements file <https://raw.githubusercontent.com/trallard/airflow-tutorial/master/requirements.txt>`_ 
+in your new directory.
 Now you can install the packages using via pip ``pip install -r requirements.txt``
 
 To leave the virtual environment run ``deactivate``
@@ -217,7 +220,7 @@ Please make sure to follow the next steps to get you all set up.
 
 1. Create an account at `https://twitter.com/ <https://twitter.com/>`_. 
 
-2. Next you will need to apply for a developer account, head to `https://developer.twitter.com/en/apply <https://developer.twitter.com/en/apply>`_.
+2. Next, you will need to apply for a developer account, head to `https://developer.twitter.com/en/apply <https://developer.twitter.com/en/apply>`_.
     You will need to provide detailed information about what you want to use the API for. 
     Make sure to complete all the steps and confirm your email address so that you can be notified about the status of your application. 
     
@@ -229,14 +232,13 @@ Please make sure to follow the next steps to get you all set up.
     .. image:: _static/twitter1.png
     Make sure to give it a descriptive name, something like ``airflow-tutorial`` or the such
 
-5. Once you complete the details and create your new app you should be able to access it via the main app dashboard. Click on deatils button next to the app name and head over to permissions.
+5. Once you complete the details and create your new app you should be able to access it via the main app dashboard. Click on details button next to the app name and head over to permissions.
 We only need read permissions for the tutorial, so these should look something like this
     .. image:: _static/twitter2.png
 
-6. Now if you click on the Keys and tokens you will be able to see a set of an API key, an API secret, an Access token and an Access secret
+6. Now if you click on the Keys and tokens you will be able to see a set of an API key, an API secret, an Access token, and an Access secret
     .. image :: _static/twitter3.png
-    They are only valid for the permissions you specified before. Keep a record of these in a safe place as we will 
-    need them for the Airflow pipelines.
+    They are only valid for the permissions you specified before. Keep a record of these in a safe place as we will need them for the Airflow pipelines.
 
 
 Docker
@@ -265,21 +267,20 @@ In the what are you planning to use the developer account for:
 ::
     This account is to be used for the Airflow tutorial at PyCon US 2019 lead by Tania Allard.
     We will be using the Twitter API to collect tweets, setting a database and create ETL pipelines as part of the tutorial.
-    This will be integrated into Airflow and no personal identifiable data will be used in the process.
+    This will be integrated into Airflow and no personally identifiable data will be used in the process.
     We will not be conducting text analysis, user details analysis or any sort of surveillance process as part of the tutorial.
 
 
 Azure Pass account
 ~~~~~~~~~~~~~~~~~~~
-As a PyCon attendee you will be issued with an Azure pass worth 200 dollars with a 90 days validity.
+As a PyCon attendee, you will be issued with an Azure pass worth 200 dollars with a 90 days validity.
 You will not need to add credit card details to activate but you will need to follow this process to redeem your credits.
 
 1. Email your facilitator at trallard@bitsandchips.me, they will send you an email with a `unique` code to redeem. Please do not share with anyone, 
-this is a single use pass and once activated it will be invalid.
+this is a single-use pass and once activated it will be invalid.
 
 2. Go to `this site <https://www.microsoftazurepass.com/?wt.mc_id=PyCon-github-taallard>`_ to redeem your pass. 
-We recommend doing this in a private/incognito window. You can then 
-click start and attach your new pass to your existing account. 
+We recommend doing this in a private/incognito window. You can then click start and attach your new pass to your existing account. 
 
 If you see the following error (see image)
 
@@ -288,14 +289,14 @@ If you see the following error (see image)
 you can go to `this site <https://signup.live.com//?wt.mc_id=PyCon-github-taallard>`_  to register the email and proceed.
 
 4. Confirm your email address. You will then be asked to add the promo code that you were sent by your instructor.
-Do not close or refresh  the window until you have received a confirmation that this has been successful. 
+Do not close or refresh the window until you have received a confirmation that this has been successful. 
 
 .. image:: _static/4.jpg
 
 5. Activate your subscription: click on the activate button and fill in the personal details
 
-Again once completed, do not refres the window until you see this image
+Again once completed, do not refresh the window until you see this image
 
 .. image:: _static/12.png
 
-At this point your subscription will be ready, click on Get started to go to your Azure portal
+At this point, your subscription will be ready, click on Get started to go to your Azure portal
