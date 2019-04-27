@@ -5,6 +5,9 @@ Please make sure to install the libraries before the workshop as the conference 
 can get quite slow when having too many people downloading and installing things at the same 
 time.
 
+Make sure to follow all the steps as detailed here especially :ref:`attendees`
+as there are specific details for the PyCon setup that need to be done in advance. 
+
 Python 3.x
 ++++++++++
 
@@ -155,7 +158,9 @@ Follow the instructions that best suit your installation.
 Anaconda
 --------
 
-If you are using Anaconda you can use this `environment.yaml` and install the 
+If you are using Anaconda first you will need to make a directory for the tutorial, for example ``mkdir airflow-tutorial``.
+Once created make sure to change into it using ``ch airflow-tutorial``.
+Next, make a copy of this `environment.yaml` and install the 
 dependencies via ``conda env create -f environment.yml``.
 Once all the dependencies are installed you can activate your environment through the follwing commands 
 ::
@@ -175,8 +180,8 @@ Create a directory for the tutorial, for example:
 
 and change your working directory to this newly created one ``cd airflow-tutorial``.
 
-Once then save this `Pipfile` and install via ``pipenv install``.
-This will install the dependencies, this might take a while so you can make yourself a brew in the meantime.
+Once then make a copy of this `Pipfile` and install via ``pipenv install``.
+This will install the dependencies you need. This might take a while so you can make yourself a brew in the meantime.
 
 Once all the dependencies are installed you can run ``pipenv shell`` which will start a session with the correct virtual environment 
 activated. To exit the shell session use ``exit``.
@@ -214,7 +219,9 @@ Please make sure to follow the next steps to get you all set up.
 
 2. Next you will need to apply for a developer account, head to `https://developer.twitter.com/en/apply <https://developer.twitter.com/en/apply>`_.
     You will need to provide detailed information about what you want to use the API for. 
-    Make sure to complete all the steps and confirm your email address so that you can be notified about the status of your application.
+    Make sure to complete all the steps and confirm your email address so that you can be notified about the status of your application. 
+    
+    .. warning:: Before completing the application read the PyCon attendees section below ⬇️ :ref:`PyCon-tut` 
 
 3. Once your application has been approved you will need to go to `https://developer.twitter.com/en/apps <https://developer.twitter.com/en/apps>`_ login with your details (they should be the same as your Twitter account ones).
 
@@ -231,4 +238,64 @@ We only need read permissions for the tutorial, so these should look something l
     They are only valid for the permissions you specified before. Keep a record of these in a safe place as we will 
     need them for the Airflow pipelines.
 
-    
+
+Docker
++++++++
+
+We are going to use Docker for some bits of the tutorial (this will make it easier to have a local Airflow instance).
+
+Follow the instructions at `https://docs.docker.com/v17.12/install/ <https://docs.docker.com/v17.12/install/>`_ make sure to read the pre-requisites quite carefully before starting the installation.
+
+
+.. _attendees:
+
+🐍 PyCon attendees  
+----------------    
+
+.. _PyCon-tut:
+
+Twitter developer app
+~~~~~~~~~~~~~~~~~
+
+The Twitter team will be expediting your applications to make sure you are all set up for the day 😎.
+
+When filling in your application make sure to add the following details (as written here) to make sure this is processed.
+
+In the what are you planning to use the developer account for:
+::
+    This account is to be used for the Airflow tutorial at PyCon US 2019 lead by Tania Allard.
+    We will be using the Twitter API to collect tweets, setting a database and create ETL pipelines as part of the tutorial.
+    This will be integrated into Airflow and no personal identifiable data will be used in the process.
+    We will not be conducting text analysis, user details analysis or any sort of surveillance process as part of the tutorial.
+
+
+Azure Pass account
+~~~~~~~~~~~~~~~~~~~
+As a PyCon attendee you will be issued with an Azure pass worth 200 dollars with a 90 days validity.
+You will not need to add credit card details to activate but you will need to follow this process to redeem your credits.
+
+1. Email your facilitator at trallard@bitsandchips.me, they will send you an email with a `unique` code to redeem. Please do not share with anyone, 
+this is a single use pass and once activated it will be invalid.
+
+2. Go to `this site <https://www.microsoftazurepass.com/?wt.mc_id=PyCon-github-taallard>`_ to redeem your pass. 
+We recommend doing this in a private/incognito window. You can then 
+click start and attach your new pass to your existing account. 
+
+If you see the following error (see image)
+
+.. image:: _static/mssignin.png
+
+you can go to `this site <https://signup.live.com//?wt.mc_id=PyCon-github-taallard>`_  to register the email and proceed.
+
+4. Confirm your email address. You will then be asked to add the promo code that you were sent by your instructor.
+Do not close or refresh  the window until you have received a confirmation that this has been successful. 
+
+.. image:: _static/4.jpg
+
+5. Activate your subscription: click on the activate button and fill in the personal details
+
+Again once completed, do not refres the window until you see this image
+
+.. image:: _static/12.png
+
+At this point your subscription will be ready, click on Get started to go to your Azure portal
