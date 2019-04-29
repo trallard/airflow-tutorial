@@ -155,7 +155,7 @@ After installation you need to start the service with:
 
 To ensure that the database launches after a reboot:
 ::  
-    systemctl enable mysql
+    systemctl enable mysqlsw
 
 You should now be able to start the mysql shell through ``/usr/bin/mysql -u root -p``
 you will be asked for the password you set during installation.
@@ -170,7 +170,7 @@ Anaconda
 --------
 
 If you are using Anaconda first you will need to make a directory for the tutorial, for example ``mkdir airflow-tutorial``.
-Once created make sure to change into it using ``ch airflow-tutorial``.
+Once created make sure to change into it using ``cd airflow-tutorial``.
 
 Next, make a copy of this `environment.yaml <https://raw.githubusercontent.com/trallard/airflow-tutorial/master/environment.yaml>`_
  and install the 

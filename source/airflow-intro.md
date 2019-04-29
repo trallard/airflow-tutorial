@@ -68,7 +68,7 @@ The mechanism that gets the taks done.
 
 ### Metadata database
 
-- Powers how the other components interact. 
+- Powers how the other components interact
 - Stores the Airflow states
 - All processes read and write from here
 
