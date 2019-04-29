@@ -39,6 +39,18 @@ project.
 To download Git, go to the following link and choose the correct version for your
 operating system: https://git-scm.com/downloads.
 
+Windows
+--------
+
+Download the  `git for Windows installer <https://gitforwindows.org/>`_ . 
+Make sure to select "use Git from the Windows command prompt" 
+this will ensure that Git is permanently added to your PATH. 
+
+Also select "Checkout Windows-style, commit Unix-style line endings" selected and click on "Next".
+
+This will provide you both git and git bash. We will use the command line quite a lot during the workshop 
+so using git bash is a good option.
+
 GitHub
 ++++++
 
