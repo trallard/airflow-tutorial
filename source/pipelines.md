@@ -79,7 +79,7 @@ GNU Make + Unix pipes + Steroids
 
 Let's us access your local MySQL from the command line, type the following on the command line:
 ```sh
-MySQL -u -root -p
+MySQL -u root -p
 ```
 followed by your MySQL password (this was done as part of your setup)
 
@@ -108,10 +108,10 @@ mysql>
  ```sql
  SELECT user, host, FROM mysql.user;
  ```
-We will need to create a new database for the following sections. So let's start by creating a new database called `airflow-tutorial`:
+We will need to create a new database for the following sections. So let's start by creating a new database called `airflowdb`:
 
 ```sql
- CREATE DATABASE airflow-tutorial CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ CREATE DATABASE airflowdb CHARACTER SET utf8 COLLATE utf8_unicode_ci;
  ```
 
 as well as creating a corresponding user:
@@ -127,9 +127,9 @@ GRANT ALL PRIVILEGES ON *.* TO 'airflow'@'localhost';
 FLUSH PRIVILEGES'
 ```
 
-If you want to restrict the access of this user to the `airflow-tutorial` database, for example, you can do it via:
+If you want to restrict the access of this user to the `airflowdb` database, for example, you can do it via:
 ```sql
-GRANT ALL PRIVILEGES ON airflow-tutorial.* To 'airflow'@'localhost';
+GRANT ALL PRIVILEGES ON airflowdb.* To 'airflow'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
@@ -162,7 +162,7 @@ The following snippet will allow you to connect to the created database from Pyt
 Note that you need the database name, password and user for this.
 
 ```python
-# Script to check the connection to the database we created earlier airflow-tutorial
+# Script to check the connection to the database we created earlier airflowdb
 
 # importing the connector from mysqlclient
 import mysql.connector as mysql
@@ -170,7 +170,10 @@ import mysql.connector as mysql
 # connecting to the database using the connect() method
 # it takes 3 parameters: user, host, and password
 
-dbconnect = mysql.connect(host="localhost", user="airflow", password="python2019")
+dbconnect = mysql.connect(host="localhost", 
+                          user="airflow", 
+                          password="python2019", 
+                          db="airflowdb")
 
 # print the connection object
 print(dbconnect)
@@ -180,7 +183,9 @@ dbconnect.close()
 
 ```
 
-`dbconnect` is a  connection object which can be used to execute queries, commit transactions and rollback transactions before closing the connection. We will use it more later
+`dbconnect` is a  connection object which can be used to execute queries, commit transactions and rollback transactions before closing the connection. We will use it more later.
+
+The `dbconnect.close()` method is used to close the connection to database. To perform further transactions, we need to create a new connection.
 
 
 ### Streaming Twitter data into the database
@@ -195,7 +200,7 @@ We will be using the Tweepy library for this (docs here [https://tweepy.readthed
 Let's start with an example to collect some Tweets from your public timeline
 (for details on the Tweet object visit [the API docs](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/intro-to-tweet-json#tweetobject))
 
-The first step will be to create a config file (`config.cgf`) with your Twitter API tokens.
+🚦 The first step will be to create a config file (`config.cgf`) with your Twitter API tokens.
 ```
 [twitter]
 consumer_key = xxxxxxxxxxxxxxxxxx
@@ -235,3 +240,128 @@ public_tweets = twitter.home_timeline()
 for tweet in public_tweets:
     print(tweet.text)
 ```
+
+### 🚦 Create a new table
+
+Let us create a folder called `etl basic` and an `stream_twitter.py` script in it. 
+This table will contain the following:
+- username
+- tweet content
+- time of creation
+- retweet count
+- place 
+- location
+
+We need to create a new table for the Twitter data. This corresponds to 6 columns and the primary key.
+
+
+
+
+### 🚦 Collect Tweets
+
+The Twitter Streaming API has [rate limits](https://dev.twitter.com/streaming/overview/connecting), and prohibits too many connection attempts happening too quickly. It also prevents too many connections being made to it using the same authorization keys. Thankfully, tweepy takes care of these details for us, and we can focus on our program.
+
+The main thing that we have to be aware of is the queue of tweets that we’re processing. If we take too long to process tweets, they will start to get queued, and Twitter may disconnect us. This means that processing each tweet needs to be extremely fast.
+
+
+
+Let's us transform the connection script we created before:
+```python
+# Import libraries needed
+import json
+import time
+
+from configparser import ConfigParser
+from pathlib import Path
+
+import tweepy
+from dateutil import parser
+from mysql import connector as mysql
+
+# Path to the config file with the keys make sure not to commit this file
+CONFIG_FILE = Path.cwd() / "config.cfg"
+
+def connectTwitter():
+    config = ConfigParser()
+    config.read(CONFIG_FILE)
+
+    # Authenticate to Twitter
+    
+    # Create Twitter API object
+    twitter = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+
+    # display some info on the authentication
+    print()
+
+    return twitter
+```
+
+The next step is to create a stream listener.
+
+The `StreamListener` class has a method called on_data. This method will automatically figure out what kind of data Twitter sent, and call an appropriate method to deal with the specific data type. It’s possible to deal with events like users sending direct messages, tweets being deleted, and more. 
+
+```python
+class customListener(tweepy.StreamListener):
+    """We need to create an instance of the Stream Listener
+    http://docs.tweepy.org/en/v3.4.0/streaming_how_to.html      
+    """
+
+    def on_error(self, status_code):
+        if status_code == 420:
+            # returning False in on_data disconnects the stream
+            return False
+
+    def on_status(self, status):
+        print(status.text)
+        return True
+
+    def on_data(self, data):
+        """
+        Automatic detection of the kind of data collected from Twitter
+        This method reads in tweet data as Json and extracts the data we want.
+        """
+        try:
+            # parse as json
+            raw_data = json.loads(data)
+
+            # extract the relevant data
+            if "text" in raw_data:
+                user = raw_data["user"]["screen_name"]
+                created_at = parser.parse(raw_data["created_at"])
+                tweet = raw_data["text"]
+                retweet_count = raw_data["retweet_count"]
+                location = raw_data["user"]["location"]
+
+            if raw_data["place"] is not None:
+                place = raw_data["place"]["country"]
+            else:
+                place = None
+
+            # insert data just collected into MySQL database
+            # populateTable(user, created_at, tweet, retweet_count, location, place)
+            print(f"Tweet colleted at: {created_at}")
+
+        except Error as e:
+            print(e)
+```
+
+🚦 So for this to be called we need to wrap around a main function:
+
+```python
+if __name__ == "__main__":
+```
+
+🚀 So far we have collected some data through streaming (enough to collect some data). And created a database where this data is going to be deposited into.
+
+The next step is to transform the data and prepare it for more downstrem processes.
+
+There are different mechanisms to share data between pipeline steps:
+
+- files 
+- databases
+- queues
+
+In each case, we need a way to get data from the current step to the next step.
+
+### Extending your data pipeline
+
