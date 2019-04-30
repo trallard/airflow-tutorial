@@ -1,72 +1,81 @@
-# Airflow basics
+# Pipelines
 
-## What is Airflow?
+![](_static/automation1.jpg)
 
-![airflow logo](_static/airflow-logo.jpeg)
+Automation helps us speed those manual boring tasks. The ability to automate means you can spend time working on other more thought-intensive projects.
 
-Airflow is a Workflow engine which means:
+Automation adds monitoring and logging tasks:
 
-- Manage scheduling and running jobs and data pipelines
-- Ensures jobs are ordered correctly based on dependencies
-- Manage the allocation of scarce resources
-- Provides mechanisms for tracking the state of jobs and recovering from failure
+| ✅ **Easy to automate**                 | ❌ **Difficult to automate**      |
+| -------------------------------------- | -------------------------------- |
+| Regularly scheduled reports            | One-off or non-scheduled tasks   |
+| Clear success/failure outcomes         | Unclear success/failure outcomes |
+| Input that can be handled via machines | Requires deeper human input      |
 
-It is highly versatile and can be used across many many domains:
-![](_static/uses.png)
 
-## Basic Airflow concepts
+## Steps to automation
 
-- **Task**: a defined unit of work (these are called operators in Airflow)
-- **Task instance**: an individual run of a single task. Task instances also have an indicative state, which could be “running”, “success”, “failed”, “skipped”, “up for retry”, etc.
-- **DAG**: Directed acyclic graph,
-  a set of tasks with explicit execution order, beginning, and end
-- **DAG run**: individual execution/run of a DAG
+Whenever you consider automating a task ask the following questions:
+- When should this task begin?
+- Does this task have a time limit?
+- What are the inputs for this task?
+- What is success or failure within this task? (How can we clearly identify the outcomes?)
+- If the task fails what should happen?
+- What does the task provide or produce? In what way? To whom?
+- What (if anything) should happen after the task concludes?
 
-**Debunking the DAG**
+<div class="alert alert-primary">
+  <h4> Top tip </h4>
+  If your project is too large or loosely defined, try breaking it up into smaller tasks and automate a few of those tasks. Perhaps your task involves a report which downloads two datasets, runs cleanup and analysis, and then sends the results to different groups depending on the outcome. 
+  You can break this task into subtasks, automating each step. If any of these subtasks fail, stop the chain and alert the whoever is responsible for maintaining the script so it can be investigated further.
+</div>
 
-The vertices and edges (the arrows linking the nodes) have an order and direction associated to them
+## What is a data pipeline?
 
-![](_static/DAG.png)
+Roughly this is how all pipelines look like:
 
-each node in a DAG corresponds to a task, which in turn represents some sort of data processing. For example:
+![](https://i1.wp.com/datapipesoft.com/wp-content/uploads/2017/05/data-pipeline.png?fit=651%2C336&ssl=1)
 
-Node A could be the code for pulling data from an API, node B could be the code for anonymizing the data. Node B could be the code for checking that there are no duplicate records, and so on.
+they consist mainly of three distinct parts: data engineering processes, data preparation, and analytics. The upstream steps and quality of data determine in great measure the performance and quality of the subsequent steps.
 
-These 'pipelines' are acyclic since they need a point of completion.
+## Why do pipelines matter?
 
-**Dependencies**
+- Analytics and batch processing is mission-critical as they power all data-intensive applications
+- The complexity of the data sources and demands increase every day
+- A lot of time is invested in writing, monitoring jobs, and troubleshooting issues.
 
-Each of the vertices has a particular direction that shows the relationship between certain nodes. For example, we can only anonymize data once this has been pulled out from the API.
+This makes data engineering one of the most critical foundations of the whole analytics cycle.
 
-## Idempotency
+### Good data pipelines are:
 
-This is one of the most important characteristics of good ETL architectures.
+- Reproducible: same code, same data, same environment -> same outcome
+- Easy to productise: need minimal modifications from R&D to production
+- Atomic: broken into smaller well defined tasks
 
-When we say that something is idempotent it means it will produce the same result regardless of how many times this is run (i.e. the results are reproducible).
+When working with data pipelines always remember these two statements:
 
-Reproducibility is particularly important in data-intensive environments as this ensures that the same inputs will always return the same outputs.
 
-## Airflow components
+![](_static/gooddata.png)
 
-![](_static/architecture.png)
+---
 
-There are 4 main components to Apache Airflow:
+![](_static/gooddata1.png)
 
-### Web server
+As your data engineering and data quality demands increase so does the complexity of the processes. So more often than not you will eventually need a workflow manager to help you with the orchestration of such processes.
 
-The GUI. This is under the hood a Flask app where you can track the status of your jobs and read logs from a remote file store (e.g. [Azure Blobstorage](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blobs-overview/?wt.mc_id=PyCon-github-taallard)).
+<div class="alert alert-custom">
+Think of a workflow manager as:
 
-### Scheduler
+GNU Make + Unix pipes + Steroids
+</div>
 
-This component is responsible for scheduling jobs. This is a multithreaded Python process that uses the DAGb object to decide what tasks need to be run, when and where.
 
-The task state is retrieved and updated from the database accordingly. The web server then uses these saved states to display job information.
+---
 
-### Executor
+## ⭐️ Creating your first ETL pipeline in Python
 
-The mechanism that gets the tasks done.
 
-### Metadata database
+### Setting your local database
 
 Let's us access your local MySQL from the command line, type the following on the command line:
 ```sh
@@ -74,16 +83,20 @@ MySQL -u root -p
 ```
 followed by your MySQL password (this was done as part of your setup)
 
-## Workflow as a code
-One of the main advantages of using a workflow system like Airflow is that all is code, which makes your workflows maintainable, versionable, testable, and collaborative.
+you should see the following message as well as a change in your prompt:
 
-Thus your workflows become more explicit and maintainable (atomic tasks).
+```
+Welcome to the MySQL monitor.  Commands end with; or \g.
+Your MySQL connection id is 276
+Server version: 8.0.15 Homebrew
 
-Not only your code is dynamic but also is your infrastructure.
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
 
-### Defining tasks
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
 
-Tasks are defined based on the abstraction of `Operators` (see Airflow docs [here](https://airflow.apache.org/concepts.html#operators)) which represent a single **idempotent task**.
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 mysql>
 ```
@@ -101,12 +114,17 @@ We will need to create a new database for the following sections. So let's start
  CREATE DATABASE airflowdb CHARACTER SET utf8 COLLATE utf8_unicode_ci;
  ```
 
-Examples:
+as well as creating a corresponding user:
+```sql
+CREATE USER 'airflow'@'localhost' IDENTIFIED BY 'password';
+```
+make sure to substitute `password` with an actual password. 
+For this tutorial let's assume the password is `python2019`.
 
-```python
-t1 = BashOperator(task_id='print_date',
-    bash_command='date,
-    dag=dag) 
+Now we need to make sure that the `airflow` user has access to the databases:
+```sql
+GRANT ALL PRIVILEGES ON *.* TO 'airflow'@'localhost';
+FLUSH PRIVILEGES'
 ```
 
 If you want to restrict the access of this user to the `airflowdb` database, for example, you can do it via:
@@ -146,6 +164,8 @@ Note that you need the database name, password and user for this.
 ```python
 # Script to check the connection to the database we created earlier airflowdb
 
+# importing the connector from mysqlclient
+import mysql.connector as mysql
 
 # connecting to the database using the connect() method
 # it takes 3 parameters: user, host, and password
@@ -170,22 +190,15 @@ The `dbconnect.close()` method is used to close the connection to database. To p
 
 ### Streaming Twitter data into the database
 
-### Airflow
-- Airbnb data teaam
-- Open-sourced mud 2015
-- Apache incubator mid 2016
-- ETL pipelines
+We are going to create a Python script that helps us to achieve the following:
+1. Create a class to conect to the Twitter API
+2. Connect our database and reads the data into the correct columns
 
-### Similarities
-- Python open source projects for data pipelines
-- Integrate with a number of sources (databases, filesystems)
-- Tracking failure, retries, success
-- Ability to identify the dependencies and execution
+We will be using the Tweepy library for this (docs here [https://tweepy.readthedocs.io/en/latest/](https://tweepy.readthedocs.io/en/latest/))
+.
 
-### Differences
-- Scheduler support: Airflow has built in support using schedulers
-- Scalability: Airflow has had stability issues in the past
-- Web interfaces
+Let's start with an example to collect some Tweets from your public timeline
+(for details on the Tweet object visit [the API docs](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/intro-to-tweet-json#tweetobject))
 
 🚦 The first step will be to create a config file (`config.cgf`) with your Twitter API tokens.
 ```
@@ -197,9 +210,15 @@ access_token_secret = xxxxxxxxxxxxxxxxxx
 ```
 Now to the coding bits:
 
+```python
+# Import libraries needed
+from configparser import ConfigParser
+from pathlib import Path
 
-![](_static/airflow.png)
+import tweepy
 
+# Path to the config file with the keys make sure not to commit this file
+CONFIG_FILE = Path.cwd() / "config.cfg"
 
 config = ConfigParser()
 config.read(CONFIG_FILE)

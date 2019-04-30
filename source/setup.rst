@@ -155,7 +155,7 @@ After installation you need to start the service with:
 
 To ensure that the database launches after a reboot:
 ::  
-    systemctl enable mysqlsw
+    systemctl enable mysql
 
 You should now be able to start the mysql shell through ``/usr/bin/mysql -u root -p``
 you will be asked for the password you set during installation.
