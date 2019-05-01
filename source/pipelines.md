@@ -106,7 +106,7 @@ mysql>
  ```
  you can also see the users and the relevant hosts using the following command
  ```sql
- SELECT user, host, FROM mysql.user;
+ SELECT user, host FROM mysql.user;
  ```
 We will need to create a new database for the following sections. So let's start by creating a new database called `airflowdb`:
 
@@ -124,7 +124,7 @@ For this tutorial let's assume the password is `python2019`.
 Now we need to make sure that the `airflow` user has access to the databases:
 ```sql
 GRANT ALL PRIVILEGES ON *.* TO 'airflow'@'localhost';
-FLUSH PRIVILEGES'
+FLUSH PRIVILEGES;
 ```
 
 If you want to restrict the access of this user to the `airflowdb` database, for example, you can do it via:
@@ -134,7 +134,7 @@ FLUSH PRIVILEGES;
 ```
 
  
- so now the output of ` SELECT user, host, FROM mysql.user;` should look like this:
+ so now the output of ` SELECT user, host FROM mysql.user;` should look like this:
 
  ```sql
  mysql> select user, host FROM mysql.user;
