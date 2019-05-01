@@ -475,7 +475,7 @@ if __name__ == "__main__":
     start_stream(myStream, track=["python", "pycon", "jupyter", "#pycon2019"], async=True)
 
 ```
-📝 Solutions at:
+📝 Solutions at: [https://github.com/trallard/airflow-tutorial/solutions](https://github.com/trallard/airflow-tutorial/solutions)
 
 ### Extending your data pipeline
 

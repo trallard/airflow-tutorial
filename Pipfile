@@ -13,7 +13,6 @@ recommonmark = "*"
 jupyter = "*"
 jupyterlab = "*"
 papermill = "*"
-apache-airflow = {extras = ["celery", "kubernetes", "mysql", "password", "slack"],version = "*"}
 celery = "*"
 mysqlclient = "*"
 tweepy = "*"
@@ -23,6 +22,7 @@ hypothesis = "*"
 matplotlib = "*"
 seaborn = "*"
 mysql-connector-python = "*"
+apache-airflow = {extras = ["celery", "mysql"],version = "*"}
 
 [requires]
 python_version = "3.7"

@@ -88,9 +88,8 @@ From the command line:
 ```
 mysql -u root -p
 mysql> CREATE DATABASE airflow CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-mysql> create user 'airflow'@'localhost' identified by 'airflow';
-mysql> grant all privileges on * . * to 'airflow'@'localhost';
-mysql> flush privileges;
+mysql> GRANT ALL PRIVILEGES ON airflow.* To 'airflow'@'localhost';
+mysql> FLUSH PRIVILEGES;
 ```
 and inititalize the database:
 
@@ -98,18 +97,36 @@ and inititalize the database:
 airflow initdb
 ```
 
+Notice that this will fail with the default `airflow.cfg`
+
+
 ## Update your local configuration
 
 Open your airflow configuration file `~/airflow/airflow.cf` and make the following changes;
 
 ```
 executor = CeleryExecutor
-sql_alchemy_conn = mysql://airflow:airflow@localhost:3306/airflow
-broker_url = amqp://guest:guest@localhost:5672/
+```
+
+```
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#broker-settings
+broker_url = amqp://guest:guest@127.0.0.1/
+
+
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-result-backend-settings
+result_backend = db+mysql://airflow:airflow@localhost:3306/airflow
+
+sql_alchemy_conn = mysql://airflow:python2019@localhost:3306/airflow
+
 ```
 
 Here we are replacing the default executor (`SequentialExecutor`) with the `CeleryExecutor` so that we can run multiple DAGs in parallel.
-We also replace the default `sqlite` database with our newly created `
+We also replace the default `sqlite` database with our newly created `airflow` database.
+
+Now we can initialize the database:
+```
+airflow initdb
+```
 
 Let's now start the webserver locally:
 
@@ -124,14 +141,14 @@ we can head over to [http://localhost:8080](http://localhost:8080) now and you w
 
 Now let's have a look at the connections ([http://localhost:8080/admin/connection/](http://localhost:8080/admin/connection/)) go to `admin > connections`. You should be able to see a number of connection availables. For this tutorial we will use some of the connections including  `mysql`.
 
-For example if you have `mysql` running but you have a different password for the root user you can edit it by clicking on the connection name.
+<!-- For example if you have `mysql` running but you have a different password for the root user you can edit it by clicking on the connection name.
 
 
 🚦Now let's create a db for our local project
 
-![](_static/connection.png)
+![](_static/connection.png) -->
 
-
+### Commands
 Let us go over some of the commands. Back on your command line:
 
 ```
@@ -158,7 +175,10 @@ Now let's start the scheduler:
 ```
 airflow scheduler
 ```
-and now with the scheduler up and running we can trigger an instance:
+
+Behind the scenes, it monitors and stays in sync with a folder for all DAG objects it contains. The Airflow scheduler is designed to run as a service in an Airflow production environment.
+
+Now with the scheduler up and running we can trigger an instance:
 ```
 $ airflow run airflow run example_bash_operator runme_0 2015-01-01
 ```
@@ -167,7 +187,7 @@ This will be stored in the database and you can see the  change of the status ch
 
 What would happen for example if we wanted to run  or trigger the `tutorial` task? 🤔
 
-Let's try from the UI and see what happens.
+Let's try from the CLI and see what happens.
 
 ```
 airflow trigger_dag tutorial
@@ -179,16 +199,51 @@ airflow trigger_dag tutorial
 Let's create our first simple DAG. 
 Inside the dag directory (`~/airflow/dags)` create a `simple_dag.py` file.
 
-And let's start by importing the needed libraries:
 
 ```python
-# airflow related
+from datetime import datetime, timedelta
 from airflow import DAG
+from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
-from airflow.operators.bash_operator import BashOperator
-# other packages
-from datetime import datetime
-from datetime import timedelta
-```
 
-Next we need to set the defaults:
+
+def print_hello():
+    return "Hello world!"
+
+
+default_args = {
+    "owner": "airflow",
+    "depends_on_past": False,
+    "start_date": datetime(2019, 4, 30),
+    "email": ["airflow@example.com"],
+    "email_on_failure": False,
+    "email_on_retry": False,
+    "retries": 1,
+    "retry_delay": timedelta(minutes=2),
+}
+
+dag = DAG(
+    "hello_world",
+    description="Simple tutorial DAG",
+    schedule_interval="0 12 * * *",
+    default_args=default_args,
+    catchup=False,
+)
+
+t1 = DummyOperator(task_id="dummy_task", retries=3, dag=dag)
+
+t2 = PythonOperator(task_id="hello_task", python_callable=print_hello, dag=dag)
+
+# sets downstream foe t1
+t1 >> t2
+
+# equivalent
+# t2.set_upstream(t1)
+
+```
+If it is properly setup you should be able to see this straight away on your instance.
+
+
+### Now let's create a DAG from the previous ETL pipeline (kind of)
+
+All hands on - check the solutions
