@@ -1,4 +1,4 @@
-### Deplopying to the cloud
+### Deploying to the cloud
 
 
 ![](_static/azure.png)

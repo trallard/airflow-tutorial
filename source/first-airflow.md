@@ -2,10 +2,10 @@
 
 ### Pre-requisites
 
-The following prerrequisites are needed:
+The following prerequisites are needed:
 
 - Libraries detailed in the Setting up section (either via conda or pipenv)
-- mysql installed
+- MySQL installed
 - text editor
 - command line
   
@@ -28,12 +28,12 @@ this will start a shell within a virtual environment, to exit the shell you need
 
 ## Starting Airflow locally
 
-Airflow home lives in `~/airflow` by default, but you can change the location before installing airflow. You first need to set the `AIRFLOW_HOME` environment variable and then install airflow. For example using pip:
+Airflow home lives in `~/airflow` by default, but you can change the location before installing airflow. You first need to set the `AIRFLOW_HOME` environment variable and then install airflow. For example, using pip:
 
 ```sh
 export AIRFLOW_HOME=~/mydir/airflow
 
-# install from pypi using pip
+# install from PyPI using pip
 pip install apache-airflow
 ```
 
@@ -54,21 +54,21 @@ We need to create a local dag folder:
 mkdir ~/airflow/dags
 ```
 
-As your project evolve, your directory will look something like this:
+As your project evolves, your directory will look something like this:
 
 ```
 airflow                  # the root directory.
 ├── dags                 # root folder for all dags. files inside folders are not searched for dags.
-│   ├── my_dag.py        # my dag (definitions of tasks/operators) including precedence.
+│   ├── my_dag.py, # my dag (definitions of tasks/operators) including precedence.
 │   └── ...
 ├── logs                 # logs for the various tasks that are run
 │   └── my_dag           # DAG specific logs
-│   │   ├── src1_s3      # folder for task specific logs (log files are created by date of run)
+│   │   ├── src1_s3      # folder for task-specific logs (log files are created by date of a run)
 │   │   ├── src2_hdfs
 │   │   ├── src3_s3
 │   │   └── spark_task_etl
-├── airflow.db           # SQLite database used by Airflow internally to track status of each DAG.
-├── airflow.cfg          # global configuration for Airflow (this can be overriden by config inside the file.)
+├── airflow.db           # SQLite database used by Airflow internally to track the status of each DAG.
+├── airflow.cfg          # global configuration for Airflow (this can be overridden by config inside the file.)
 └── ...
 ```
 
@@ -79,19 +79,19 @@ As we mentioned before Airflow uses a database to keep track of the tasks and th
 To start the default database we can run
 ` airflow initdb`. This will initialize your database via alembic so that it matches the latest Airflow release.
 
-The default database used is `sqlite` which means you cannot parallelize tasks using this database. Since we have mysql and mysqlclient installed we will set them up so that we can use them with airflow.
+The default database used is `sqlite` which means you cannot parallelize tasks using this database. Since we have MySQL and MySQL client installed we will set them up so that we can use them with airflow.
 
 🚦Create an airflow database
 
 From the command line:
 
 ```
-mysql -u root -p
+MySQL -u root -p
 mysql> CREATE DATABASE airflow CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 mysql> GRANT ALL PRIVILEGES ON airflow.* To 'airflow'@'localhost';
 mysql> FLUSH PRIVILEGES;
 ```
-and inititalize the database:
+and initialize the database:
 
 ```
 airflow initdb
@@ -100,9 +100,10 @@ airflow initdb
 Notice that this will fail with the default `airflow.cfg`
 
 
-## Update your local configuration
+## Update your local configuration 
 
-Open your airflow configuration file `~/airflow/airflow.cf` and make the following changes;
+Open your airflow configuration file `~/airflow/airflow.cf` and make the following changes:
+
 
 ```
 executor = CeleryExecutor
@@ -110,6 +111,7 @@ executor = CeleryExecutor
 
 ```
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#broker-settings
+# needs rabbitmq running
 broker_url = amqp://guest:guest@127.0.0.1/
 
 
@@ -128,20 +130,20 @@ Now we can initialize the database:
 airflow initdb
 ```
 
-Let's now start the webserver locally:
+Let's now start the web server locally:
 
 
 ```
 airflow webserver -p 8080
 ```
 
-we can head over to [http://localhost:8080](http://localhost:8080) now and you will see that there are a number of example DAGS already there.
+we can head over to [http://localhost:8080](http://localhost:8080) now and you will see that there are a number of examples DAGS already there.
 
 🚦 Take some time to familiarise with the UI and get your local instance set up
 
-Now let's have a look at the connections ([http://localhost:8080/admin/connection/](http://localhost:8080/admin/connection/)) go to `admin > connections`. You should be able to see a number of connection availables. For this tutorial we will use some of the connections including  `mysql`.
+Now let's have a look at the connections ([http://localhost:8080/admin/connection/](http://localhost:8080/admin/connection/)) go to `admin > connections`. You should be able to see a number of connections available. For this tutorial, we will use some of the connections including  `mysql`.
 
-<!-- For example if you have `mysql` running but you have a different password for the root user you can edit it by clicking on the connection name.
+<!-- For example, if you have `mysql` running but you have a different password for the root user you can edit it by clicking on the connection name.
 
 
 🚦Now let's create a db for our local project
@@ -169,7 +171,7 @@ airflow test tutorial print_date 2019-05-01
 ```
 airflow test tutorial templated 2019-05-01
 ```
-By using the test commands theese are not saved in the database.
+By using the test commands these are not saved in the database.
 
 Now let's start the scheduler:
 ```
@@ -178,14 +180,14 @@ airflow scheduler
 
 Behind the scenes, it monitors and stays in sync with a folder for all DAG objects it contains. The Airflow scheduler is designed to run as a service in an Airflow production environment.
 
-Now with the scheduler up and running we can trigger an instance:
+Now with the schedule up and running we can trigger an instance:
 ```
 $ airflow run airflow run example_bash_operator runme_0 2015-01-01
 ```
 
-This will be stored in the database and you can see the  change of the status change straight away.
+This will be stored in the database and you can see the change of the status change straight away.
 
-What would happen for example if we wanted to run  or trigger the `tutorial` task? 🤔
+What would happen for example if we wanted to run or trigger the `tutorial` task? 🤔
 
 Let's try from the CLI and see what happens.
 
