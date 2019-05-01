@@ -8,7 +8,7 @@ Airflow is a Workflow engine which means:
 
 - Manage scheduling and running jobs and data pipelines
 - Ensures jobs are ordered correctly based on dependencies
-- Manage allocation of scarce resources
+- Manage the allocation of scarce resources
 - Provides mechanisms for tracking the state of jobs and recovering from failure
 
 It is highly versatile and can be used across many many domains:
@@ -16,10 +16,10 @@ It is highly versatile and can be used across many many domains:
 
 ## Basic Airflow concepts
 
-- **Task**: defined unit of work (these are calles operators in Airflow)
-- **Task instance**: individual run of a single task. Task instances also have an indicative state, which could be “running”, “success”, “failed”, “skipped”, “up for retry”, etc.
+- **Task**: a defined unit of work (these are called operators in Airflow)
+- **Task instance**: an individual run of a single task. Task instances also have an indicative state, which could be “running”, “success”, “failed”, “skipped”, “up for retry”, etc.
 - **DAG**: Directed acyclic graph,
-  a set of taks with explicit execution order, beginning and end
+  a set of tasks with explicit execution order, beginning, and end
 - **DAG run**: individual execution/run of a DAG
 
 **Debunking the DAG**
@@ -36,15 +36,15 @@ These 'pipelines' are acyclic since they need a point of completion.
 
 **Dependencies**
 
-Each of the vertices has a particular direction that shows the relationship between certain nodes. For example we can only anonymise data once this has been pulled out from the API.
+Each of the vertices has a particular direction that shows the relationship between certain nodes. For example, we can only anonymize data once this has been pulled out from the API.
 
 ## Idempotency
 
 This is one of the most important characteristics of good ETL architectures.
 
-When we say that something is idempotent it means it will produce the same result regardless of how many times this is run (i.e. the results are reproducbile).
+When we say that something is idempotent it means it will produce the same result regardless of how many times this is run (i.e. the results are reproducible).
 
-Reproducibility is particularly imnportant in data-intensive environments as this ensures that same inputs will always return the same outputs.
+Reproducibility is particularly important in data-intensive environments as this ensures that the same inputs will always return the same outputs.
 
 ## Airflow components
 
@@ -52,23 +52,23 @@ Reproducibility is particularly imnportant in data-intensive environments as thi
 
 There are 4 main components to Apache Airflow:
 
-### Webserver
+### Web server
 
 The GUI. This is under the hood a Flask app where you can track the status of your jobs and read logs from a remote file store (e.g. [Azure Blobstorage](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blobs-overview/?wt.mc_id=PyCon-github-taallard)).
 
 ### Scheduler
 
-This component is reponsible for scheduling the jobs. This is a multithreaded Pythonn process that uses the DAGb object to decide what tasks need to be run, when and where.
+This component is responsible for scheduling jobs. This is a multithreaded Python process that uses the DAGb object to decide what tasks need to be run, when and where.
 
-The task state is retrieved and updated from the database accordingly. The webserver then uses these saved states to display job information.
+The task state is retrieved and updated from the database accordingly. The web server then uses these saved states to display job information.
 
 ### Executor
 
-The mechanism that gets the taks done.
+The mechanism that gets the tasks done.
 
 ### Metadata database
 
-- Powers how the other components interact. 
+- Powers how the other components interact
 - Stores the Airflow states
 - All processes read and write from here
 
@@ -115,3 +115,40 @@ run_this = PythonOperator(
 )
 ```
 
+## Comparing Luigi and Airflow
+
+### Luigi 
+
+- Created at Spotify (named after the plumber)
+- Open sourced in late 2012
+- GNU make for data
+
+### Airflow
+- Airbnb data team
+- Open-sourced mud 2015
+- Apache incubator mid-2016
+- ETL pipelines
+
+### Similarities
+- Python open source projects for data pipelines
+- Integrate with a number of sources (databases, filesystems)
+- Tracking failure, retries, success
+- Ability to identify the dependencies and execution
+
+### Differences
+- Scheduler support: Airflow has built-in support using schedulers
+- Scalability: Airflow has had stability issues in the past
+- Web interfaces
+
+![](_static/luigi.png)
+
+
+![](_static/airflow.png)
+
+
+| Airflow                                          | Luigi                                                                          |
+| ------------------------------------------------ | ------------------------------------------------------------------------------ |
+| Task are defined by`dag_id` defined by user name | Task are defined by task name and parameters                                   |
+| Task retries based on definitions                | Decide if a task is done via input/output                                      |
+| Task code to the worker                          | Workers started by Python file where the tasks are defined                     |
+| Centralized scheduler (Celery spins up workers)  | Centralized scheduler in charge of deduplication sending tasks (Tornado based) |

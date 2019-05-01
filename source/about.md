@@ -23,4 +23,4 @@ Place the post it as follows:
 
 🚦 Purple postit: all good, task has been completed
 
-🚦 Yellow postit: I need extra time or need help with the task in hand
+🚦 Orange postit: I need extra time or need help with the task in hand
