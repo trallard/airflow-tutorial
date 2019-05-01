@@ -244,17 +244,95 @@ for tweet in public_tweets:
 ### 🚦 Create a new table
 
 Let us create a folder called `etl basic` and an `stream_twitter.py` script in it. 
+
+We are going to create a SQL table to save the tweets to.
 This table will contain the following:
 - username
 - tweet content
 - time of creation
 - retweet count
-- place 
-- location
+- unique tweet id
 
-We need to create a new table for the Twitter data. This corresponds to 6 columns and the primary key.
+This corresponds to 5 columns and the primary key.
+
+We already know how to connect to a database:
+```py
+from mysql import connector as mysql
+
+# Details for our MySql connection
+DATABASE = {
+    "host": "localhost",
+    "user": "airflow",
+    "password": "python2019",
+    "db": "airflowdb",
+}
+
+# ----------------------------------------------
+#  Database related functions
+# ----------------------------------------------
 
 
+def connect_db(my_database):
+    """Connect to a given my_database
+    
+    Args:
+        my_database(dict): dictionary with the my_database details
+    
+    Returns:
+        dbconnect: MySql my_database connection object
+    """
+    try:
+        dbconnect = mysql.connect(
+            host=my_database.get("host"),
+            user=my_database.get("user"),
+            password=my_database.get("password"),
+            db=my_database.get("db"),
+        )
+        print("connected")
+        return dbconnect
+    except mysql.Error as e:
+        print(e)
+
+```
+
+Now we need to write a function to create the table
+
+```py
+def create_table(my_database, new_table):
+    """Create new table in a my_database
+    
+    Args:
+        my_database (dict): details for the db
+        new_table (str): name of the table to create
+    """
+
+    dbconnect = connect_db(my_database)
+
+    # create a cursor for the queries
+    cursor = dbconnect.cursor()
+    cursor.execute("USE airflowdb")
+
+    # here we delete the table, it can be kept or else
+    cursor.execute(f"DROP TABLE IF EXISTS {new_table}")
+
+    # these matches the Twitter data
+    query = (
+        f"CREATE TABLE `{new_table}` ("
+        "  `id` INT(11) NOT NULL AUTO_INCREMENT,"
+        "  `user` varchar(100) NOT NULL ,"
+        "  `created_at` timestamp,"
+        "  `tweet` varchar(255) NOT NULL,"
+        "  `retweet_count` int(11) ,"
+        "  `id_str` varchar(100),"
+        "  PRIMARY KEY (`id`))"
+    )
+
+    cursor.execute(query)
+    dbconnect.close()
+    cursor.close()
+
+    return print(f"Created {new_table} table")
+```
 
 
 ### 🚦 Collect Tweets
@@ -285,13 +363,13 @@ def connectTwitter():
     config = ConfigParser()
     config.read(CONFIG_FILE)
 
-    # Authenticate to Twitter
+    #  complete the part to Authenticate to Twitter
     
+
     # Create Twitter API object
     twitter = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-    # display some info on the authentication
-    print()
+    print(f"🦄 Connected as {twitter.me().screen_name}")
 
     return twitter
 ```
@@ -330,25 +408,72 @@ class customListener(tweepy.StreamListener):
                 created_at = parser.parse(raw_data["created_at"])
                 tweet = raw_data["text"]
                 retweet_count = raw_data["retweet_count"]
-                location = raw_data["user"]["location"]
+                id_str = raw_data["id_str"]
 
-            if raw_data["place"] is not None:
-                place = raw_data["place"]["country"]
-            else:
-                place = None
-
-            # insert data just collected into MySQL database
-            # populateTable(user, created_at, tweet, retweet_count, location, place)
+            # insert data just collected into MySQL my_database
+            populate_table(user, created_at, tweet, retweet_count, id_str)
             print(f"Tweet colleted at: {created_at}")
 
         except Error as e:
             print(e)
 ```
 
-🚦 So for this to be called we need to wrap around a main function:
+🚦 In pairs discuss how you would create the `populate_table` function
+
+
+```py
+def populate_table(
+    user, created_at, tweet, retweet_count, id_str, my_database=DATABASE
+):
+    """Populate a given table witht he Twitter collected data
+    
+    Args:
+        user (str): username from the status
+        created_at (datetime): when the tweet was created
+        tweet (str): text
+        retweet_count (int): number of retweets
+        id_str (int): unique id for the tweet
+    """
+
+    dbconnect = connect_db(DATABASE)
+
+    cursor = dbconnect.cursor()
+    cursor.execute("USE airflowdb")
+
+    # add content here
+
+    try:
+        # what is missing? 
+        commit()
+        print("commited")
+
+    except mysql.Error as e:
+        print(e)
+        dbconnect.rollback()
+
+    cursor.close()
+    dbconnect.close()
+
+    return
+```
+
+🚦 For this to be called we need to wrap around a main function:
 
 ```python
+# complete the main function
 if __name__ == "__main__":
+    
+    create_table(DATABASE, "tweets")
+    # first we need to authenticate
+    twitter = connectTwitter()
+
+    # next: create stream listener
+    myStreamListener = customListener()
+    myStream = tweepy.Stream(auth=twitter.auth, listener=myStreamListener, timeout=30)
+
+    # stream tweets using the filter method
+    start_stream(myStream, track=["python", "pycon", "jupyter", "#pycon2019"], async=True)
+
 ```
 
 🚀 So far we have collected some data through streaming (enough to collect some data). And created a database where this data is going to be deposited into.
@@ -365,3 +490,9 @@ In each case, we need a way to get data from the current step to the next step.
 
 ### Extending your data pipeline
 
+🚦 The next step would be to add some 'transformation' steps to the data set.
+
+Modify your `stream_twitter.py` so that the table contains also: language, follower count and country.
+
+
+Solutions can be found at:
