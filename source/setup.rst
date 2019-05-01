@@ -174,7 +174,7 @@ Once created make sure to change into it using ``cd airflow-tutorial``.
 
 Next, make a copy of this `environment.yaml <https://raw.githubusercontent.com/trallard/airflow-tutorial/master/environment.yaml>`_
  and install the 
-dependencies via ``Conda env create -f environment.yml``.
+dependencies via ``conda env create -f environment.yml``.
 Once all the dependencies are installed you can activate your environment through the following commands 
 ::
     source activate airflow-env # Mac
