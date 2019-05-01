@@ -1,24 +1,29 @@
 """ Simple Airflow data pipeline example using Twitter API """
-from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
-from airflow.operators.email_operator import EmailOperator
-from airflow.hooks import sqlite_hook
-from airflow.hooks.mysql_hook import MySqlHook
-from tweepy import API, Cursor, OAuthHandler
+import ast
+import glob
+import itertools
+import os.path
+import shutil
+from collections import Counter
 from configparser import ConfigParser
 from csv import DictWriter, writer
-from collections import Counter
 from datetime import datetime, timedelta
-import ast
-import itertools
-import glob
-import shutil
-import pandas as pd
-import os.path
 from pathlib import Path
+import MySQLdb
+import MySQLdb.cursors
 
-RAW_TWEET_DIR = Path("../data/tweets/").resolve()
-CONFIG_FILE = Path("../../config.cfg").resolve()
+import pandas as pd
+from tweepy import API, Cursor, OAuthHandler
+
+from airflow import DAG
+from airflow.hooks import sqlite_hook
+from airflow.hooks.mysql_hook import MySqlHook
+from airflow.models import Variable
+from airflow.operators.email_operator import EmailOperator
+from airflow.operators.python_operator import PythonOperator
+
+RAW_TWEET_DIR = os.path.abspath(os.path.join(__file__, "../data/tweets/"))
+CONFIG_FILE = os.path.abspath(os.path.join(__file__, "../config/prod.cfg"))
 MAX_TWEEPY_PAGE = 2
 
 # since there do not exist task on their own we need to create the DAG
@@ -71,14 +76,10 @@ def extract_tweet_data(tweepy_obj, query):
 def search_twitter(**kwargs):
     """ Search for a query in public tweets"""
     query = kwargs.get("params").get("query")
-    config = ConfigParser()
-    config.read(CONFIG_FILE)
-    auth = OAuthHandler(
-        config.get("twitter", "consumer_key"), config.get("twitter", "consumer_secret")
-    )
+
+    auth = OAuthHandler(Variable.get("consumer_key"), Variable.get("consumer_secret"))
     auth.set_access_token(
-        config.get("twitter", "access_token"),
-        config.get("twitter", "access_token_secret"),
+        Variable.get("access_token"), Variable.get("access_token_secret")
     )
     api = API(auth)
 
@@ -107,6 +108,11 @@ def search_twitter(**kwargs):
         RAW_TWEET_DIR, query, datetime.now().strftime("%m%d%Y%H%M%S")
     )
 
+    # check that the directory exists
+    if not Path(filename).resolve().parent.exists():
+
+        os.mkdir(Path(filename).resolve().parent)
+
     with open(filename, "w") as raw_file:
         raw_wrtr = DictWriter(raw_file, fieldnames=all_tweets[0].keys())
         raw_wrtr.writeheader()
@@ -119,6 +125,8 @@ def csv_to_sql(directory=RAW_TWEET_DIR, **kwargs):
             directory: str (file path to csv files)
     """
     dbconn = MySqlHook(mysl_conn_id="mysql_default")
+    cursor = dbconn.get_cursor()
+
     for fname in glob.glob("{}/*.csv".format(directory)):
         if "_read" not in fname:
             try:
@@ -136,6 +144,8 @@ def identify_popular_links(directory=RAW_TWEET_DIR, write_mode="w", **kwargs):
         (or directory kwarg)
     """
     dbconn = MySqlHook(mysl_conn_id="mysql_default")
+    cursor = dbconn.cursor()
+
     query = """select * from tweets where
     created > date('now', '-1 days') and urls is not null
     order by favorite_count"""
@@ -156,7 +166,8 @@ simple_search = PythonOperator(
     provide_context=True,
     python_callable=search_twitter,
     dag=dag,
-    params={"query": "#python"},
+    # note we pass this as a params obj
+    params={"query": "#pycon"},
 )
 
 
