@@ -50,7 +50,7 @@ This makes data engineering one of the most critical foundations of the whole an
 
 - Reproducible: same code, same data, same environment -> same outcome
 - Easy to productise: need minimal modifications from R&D to production
-- Atomic: broken into smaller well defined tasks
+- Atomic: broken into smaller well-defined tasks
 
 When working with data pipelines always remember these two statements:
 
@@ -159,7 +159,7 @@ DROP USER '<username>'@'localhost' ;
 
 The following snippet will allow you to connect to the created database from Python:
 
-Note that you need the database name, password and user for this.
+Note that you need the database name, password, and user for this.
 
 ```python
 # Script to check the connection to the database we created earlier airflowdb
@@ -183,7 +183,7 @@ dbconnect.close()
 
 ```
 
-`dbconnect` is a  connection object which can be used to execute queries, commit transactions and rollback transactions before closing the connection. We will use it more later.
+`dbconnect` is a  connection object which can be used to execute queries, commit transactions and rollback transactions before closing the connection. We will use it later.
 
 The `dbconnect.close()` method is used to close the connection to database. To perform further transactions, we need to create a new connection.
 
@@ -191,7 +191,7 @@ The `dbconnect.close()` method is used to close the connection to database. To p
 ### Streaming Twitter data into the database
 
 We are going to create a Python script that helps us to achieve the following:
-1. Create a class to conect to the Twitter API
+1. Create a class to connect to the Twitter API
 2. Connect our database and reads the data into the correct columns
 
 We will be using the Tweepy library for this (docs here [https://tweepy.readthedocs.io/en/latest/](https://tweepy.readthedocs.io/en/latest/))
@@ -243,7 +243,7 @@ for tweet in public_tweets:
 
 ### 🚦 Create a new table
 
-Let us create a folder called `etl basic` and an `stream_twitter.py` script in it. 
+Let us create a folder called `etl-basic` and a `stream_twitter.py` script in it. 
 
 We are going to create a SQL table to save the tweets to.
 This table will contain the following:
@@ -337,7 +337,7 @@ def create_table(my_database, new_table):
 
 ### 🚦 Collect Tweets
 
-The Twitter Streaming API has [rate limits](https://dev.twitter.com/streaming/overview/connecting), and prohibits too many connection attempts happening too quickly. It also prevents too many connections being made to it using the same authorization keys. Thankfully, tweepy takes care of these details for us, and we can focus on our program.
+The Twitter Streaming API has [rate limits](https://dev.twitter.com/streaming/overview/connecting) and prohibits too many connection attempts happening too quickly. It also prevents too many connections being made to it using the same authorization keys. Thankfully, tweepy takes care of these details for us, and we can focus on our program.
 
 The main thing that we have to be aware of is the queue of tweets that we’re processing. If we take too long to process tweets, they will start to get queued, and Twitter may disconnect us. This means that processing each tweet needs to be extremely fast.
 
@@ -396,7 +396,7 @@ class customListener(tweepy.StreamListener):
     def on_data(self, data):
         """
         Automatic detection of the kind of data collected from Twitter
-        This method reads in tweet data as Json and extracts the data we want.
+        This method reads in tweet data as JSON and extracts the data we want.
         """
         try:
             # parse as json
@@ -475,10 +475,13 @@ if __name__ == "__main__":
     start_stream(myStream, track=["python", "pycon", "jupyter", "#pycon2019"], async=True)
 
 ```
+📝 Solutions at:
+
+### Extending your data pipeline
 
 🚀 So far we have collected some data through streaming (enough to collect some data). And created a database where this data is going to be deposited into.
 
-The next step is to transform the data and prepare it for more downstrem processes.
+The next step is to transform the data and prepare it for more downstream processes.
 
 There are different mechanisms to share data between pipeline steps:
 
@@ -488,11 +491,141 @@ There are different mechanisms to share data between pipeline steps:
 
 In each case, we need a way to get data from the current step to the next step.
 
-### Extending your data pipeline
 
 🚦 The next step would be to add some 'transformation' steps to the data set.
 
 Modify your `stream_twitter.py` so that the table contains also: language, follower count and country.
 
+Now let's create a script called `analyse_twitter.py`
 
-Solutions can be found at:
+This script will do the following:
+
+- Load the table into a pandas dataframe
+- Clean the data: lowercase usernames, remove RT
+- Create a plot from the data
+- Save the plot and a csv with the clean data
+
+
+```py
+import os
+import os.path
+import re
+from datetime import datetime
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import mysql.connector as mysql
+import pandas as pd
+
+# import the previously created functions
+from stream_twitter import connect_db
+
+# Details for our MySql connection
+DATABASE = {
+    "host": "localhost",
+    "user": "airflow",
+    "password": "python2019",
+    "db": "airflowdb",
+}
+
+# ----------------------------------------------
+#  Database related functions
+# ----------------------------------------------
+
+
+def sql_to_csv(my_database, my_table):
+
+    dbconnect = connect_db(my_database)
+
+    cursor = dbconnect.cursor()
+
+    query = f"SELECT * FROM {table}"
+    all_tweets = pd.read_sql_query(query, dbconnect)
+
+    if os.path.exists("./data"):
+        all_tweets.to_csv("./data/raw_tweets.csv", index=False)
+
+    else:
+        os.mkdir("./data")
+        all_tweets.to_csv("./data/raw_tweets.csv", index=False)
+
+
+def sql_to_df(my_database, my_table):
+    dbconnect = connect_db(my_database)
+
+    cursor = dbconnect.cursor()
+
+    query = f"SELECT * FROM {my_table}"
+
+    # store in data frame
+
+    df = pd.read_sql_query(query, dbconnect, index_col="id")
+
+    cursor.close()
+    dbconnect.close()
+
+    return df
+
+
+# ----------------------------------------------
+#  Data processing
+# ----------------------------------------------
+
+
+def clean_data(df):
+
+    # Make all usernames lowercase
+    clean_df = df.copy()
+    clean_df["user"] = df["user"].str.lower()
+
+    # keep only non RT
+    clean_df = clean_df[~clean_df["tweet"].str.contains("RT")]
+
+    return clean_df
+
+
+def create_plots(df):
+    x = df["language"].unique()
+    fig, ax = plt.subplots()
+    countries = df["language"].value_counts()
+    plt.bar(range(len(countries)), countries)
+    fig.suptitle("Language counts")
+    plt.xlabel("languages")
+    plt.ylabel("count")
+    ax.set_xticklabels(x)
+
+    if os.path.exists("./plots"):
+        fig.savefig("./plots/barchart_lang.png")
+
+    else:
+        os.mkdir("./plots")
+        fig.savefig("./plots/barchart_lang.png")
+
+
+def save_df(df):
+    today = datetime.today().strftime("%Y-%m-%d")
+
+    if os.path.exists("./data"):
+        df.to_csv(f"./data/{today}-clean-df.csv", index=None)
+
+    else:
+        os.mkdir("./data")
+        df.to_csv(f"./data/{today}-clean-df.csv", index=None)
+
+
+if __name__ == "__main__":
+
+    df = sql_to_df(DATABASE, "tweets_long")
+    print("Database loaded in df")
+
+    clean_df = clean_data(df)
+
+    create_plots(clean_df)
+
+    save_df(clean_df)
+```
+
+
+🚦In pairs discuss:
+- How would you run the two scripts together?
+- Try and create the pipeline: `stream_twitter.py` -> `analyse_twitter.py`
