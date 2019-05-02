@@ -200,7 +200,7 @@ We will be using the Tweepy library for this (docs here [https://tweepy.readthed
 Let's start with an example to collect some Tweets from your public timeline
 (for details on the Tweet object visit [the API docs](https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/intro-to-tweet-json#tweetobject))
 
-🚦 The first step will be to create a config file (`config.cgf`) with your Twitter API tokens.
+🚦 The first step will be to create a config file (`config.cfg`) with your Twitter API tokens.
 ```
 [twitter]
 consumer_key = xxxxxxxxxxxxxxxxxx
