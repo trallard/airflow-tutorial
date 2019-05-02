@@ -5,6 +5,7 @@
 # ------------------------------------------------------------------
 
 # Import libraries needed
+import sys
 import json
 import time
 from configparser import ConfigParser
@@ -255,4 +256,17 @@ if __name__ == "__main__":
     myStream = tweepy.Stream(auth=twitter.auth, listener=myStreamListener, timeout=30)
 
     # stream tweets using the filter method
-    start_stream(myStream, track=["python", "pycon", "jupyter", "#pycon2019"], async=True)
+    version = float(f"{sys.version_info[0]}.{sys.version_info[1]}")
+    if version >= 3.7:
+        kwargs = {
+            'track': ["python", "pycon", "jupyter", "#pycon2019"],
+            'is_async': True
+        }
+    else:
+        kwargs = {
+            'track': ["python", "pycon", "jupyter", "#pycon2019"],
+            'async': True
+        }
+        pass
+    start_stream(myStream, **kwargs)
+    pass
