@@ -134,7 +134,7 @@ FLUSH PRIVILEGES;
 ```
 
  
- so now the output of ` SELECT user, host, FROM mysql.user;` should look like this:
+ so now the output of ` SELECT user, host FROM mysql.user;` should look like this:
 
  ```sql
  mysql> select user, host FROM mysql.user;
