@@ -1,0 +1,479 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Setup &#8212; Airflow tutorial  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="About the workshop" href="about.html" />
+    <link rel="prev" title="Airflow tutorial" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="index.html" title="Previous document">Airflow tutorial</a>
+        </li>
+        <li>
+          <a href="about.html" title="Next document">About the workshop</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="setup">
+<h1>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h1>
+<p>This section will guide you through the pre requisites for the workshop.
+Please make sure to install the libraries before the workshop as the conference WiFi
+can get quite slow when having too many people downloading and installing things at the same
+time.</p>
+<p>Make sure to follow all the steps as detailed here especially <a class="reference internal" href="#attendees"><span class="std std-ref">🐍 PyCon attendees</span></a>
+as there are specific details for the PyCon setup that needs to be done in advance.</p>
+<div class="section" id="python-3-x">
+<h2>Python 3.x<a class="headerlink" href="#python-3-x" title="Permalink to this headline">¶</a></h2>
+<p>3.7 Preferred</p>
+<p>We will be using <a class="reference external" href="https://www.python.org/">Python</a>.
+Installing all of Python’s packages individually can be a bit
+difficult, so we recommend using <a class="reference external" href="https://www.anaconda.com/">Anaconda</a> which
+provides a variety of useful packages/tools.</p>
+<p>To download Anaconda, follow the link <a class="reference external" href="https://www.anaconda.com/download/">https://www.anaconda.com/download/</a> and select
+Python 3. Following the download, run the installer as per usual on your machine.</p>
+<p>If you prefer not using Anaconda then this <a class="reference external" href="https://realpython.com/installing-python/">tutorial</a> can help you with the installation and
+setup.</p>
+<p>If you already have Python installed but not via Anaconda do not worry.
+Make sure to have either <code class="docutils literal notranslate"><span class="pre">venv</span></code> or <code class="docutils literal notranslate"><span class="pre">pipenv</span></code> installed. Then follow the instructions to set
+your virtual environment further down.</p>
+</div>
+<div class="section" id="git">
+<h2>Git<a class="headerlink" href="#git" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://git-scm.com/">Git</a> is a version control software that records changes
+to a file or set of files. Git is especially helpful for software developers
+as it allows changes to be tracked (including who and when) when working on a
+project.</p>
+<p>To download Git, go to the following link and choose the correct version for your
+operating system: <a class="reference external" href="https://git-scm.com/downloads">https://git-scm.com/downloads</a>.</p>
+<div class="section" id="windows">
+<h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<p>Download the  <a class="reference external" href="https://gitforwindows.org/">git for Windows installer</a> .
+Make sure to select “use Git from the Windows command prompt”
+this will ensure that Git is permanently added to your PATH.</p>
+<p>Also select “Checkout Windows-style, commit Unix-style line endings” selected and click on “Next”.</p>
+<p>This will provide you both git and git bash. We will use the command line quite a lot during the workshop
+so using git bash is a good option.</p>
+</div>
+</div>
+<div class="section" id="github">
+<h2>GitHub<a class="headerlink" href="#github" title="Permalink to this headline">¶</a></h2>
+<p>GitHub is a web-based service for version control using Git. You will need
+to set up an account at <a class="reference external" href="https://github.com">https://github.com</a>. Basic GitHub accounts are
+free and you can now also have private repositories.</p>
+</div>
+<div class="section" id="text-editors-ides">
+<h2>Text Editors/IDEs<a class="headerlink" href="#text-editors-ides" title="Permalink to this headline">¶</a></h2>
+<p>Text editors are tools with powerful features designed to optimize writing code.
+There are several text editors that you can choose from.
+Here are some we recommend:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://code.visualstudio.com//?wt.mc_id=PyCon-github-taallard">VS code</a>: this is your facilitator’s favourite 💜 and it is worth trying if you have not checked it yet</p></li>
+<li><p><a class="reference external" href="https://www.jetbrains.com/pycharm/download/">Pycharm</a></p></li>
+<li><p><a class="reference external" href="https://atom.io">Atom</a></p></li>
+</ul>
+<p>We suggest trying several editors before settling on one.</p>
+<p>If you decide to go for VSCode make sure to also
+have the <a class="reference external" href="https://marketplace.visualstudio.com/itemdetails?itemName=ms-python.python&amp;wt.mc_id=PyCon-github-taallard">Python extension</a>
+installed. This will make your life so much easier (and it comes with a lot of nifty
+features 😎).</p>
+</div>
+<div class="section" id="microsoft-azure">
+<h2>Microsoft Azure<a class="headerlink" href="#microsoft-azure" title="Permalink to this headline">¶</a></h2>
+<p>You will need to get an Azure account as we will be using this to deploy the
+Airflow instance.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are doing this tutorial live at PyCon US then your
+facilitator will provide you with specific instructions to set up your Azure subscription. If you have not received these please let your facilitator know ASAP.</p>
+</div>
+<p>Follow <a class="reference external" href="https://azure.microsoft.com/en-us/free//?wt.mc_id=PyCon-github-taallard">this link</a>
+to get an Azure free subscription. This will give you 150 dollars in credit so you
+can get started getting things up and experimenting with Azure and Airflow.</p>
+</div>
+<div class="section" id="mysql">
+<h2>MySQL<a class="headerlink" href="#mysql" title="Permalink to this headline">¶</a></h2>
+<p>MySQL is one of the most popular databases used/
+We need MySQL to follow along with the tutorial. Make sure to install it beforehand.</p>
+<div class="section" id="mac-users">
+<h3>Mac users<a class="headerlink" href="#mac-users" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>There are some known issues with MySQL in Mac so we recommend using this approach to install and set MySQL up: <a class="reference external" href="https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e">https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e</a>.</p>
+</div>
+<p>Also, note that you will need to make sure that OpenSSL is on your path to make sure this is added accordingly:
+If using <code class="docutils literal notranslate"><span class="pre">zsh</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="s1">&#39;export PATH=&quot;/usr/local/opt/OpenSSL/bin:$PATH&quot;&#39;</span> <span class="o">&gt;&gt;</span> <span class="o">~/.</span><span class="n">zshrc</span>
+</pre></div>
+</div>
+<p>If using <code class="docutils literal notranslate"><span class="pre">bash</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="s1">&#39;export PATH=&quot;/usr/local/opt/openssl/bin:$PATH&quot;&#39;</span> <span class="o">&gt;&gt;</span> <span class="o">~/.</span><span class="n">bashrc</span>
+</pre></div>
+</div>
+<p>make sure to reload using <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">~/.bashrc</span></code> or <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">~/.zshrc</span></code></p>
+<div class="section" id="troubleshooting">
+<h4>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h4>
+<p>Later on, during the setup,, you will be installing <code class="docutils literal notranslate"><span class="pre">mysqlclient</span></code>.
+If during the process you get compilation errors
+try the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">env</span> <span class="n">LDFLAGS</span><span class="o">=</span><span class="s2">&quot;-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib&quot;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">mysqlclient</span>
+</pre></div>
+</div>
+<p>if you want to be safe before installing the library we recommend you set the following env variables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">LDFLAGS</span><span class="o">=</span><span class="s2">&quot;-L/usr/local/opt/openssl/lib&quot;</span>
+<span class="n">export</span> <span class="n">CPPFLAGS</span><span class="o">=</span><span class="s2">&quot;-I/usr/local/opt/openssl/include&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="windows-users">
+<h3>Windows users<a class="headerlink" href="#windows-users" title="Permalink to this headline">¶</a></h3>
+<p>Download and install MySQL from the official website <a class="reference external" href="https://dev.mysql.com/downloads/installer/">https://dev.mysql.com/downloads/installer/</a> and execute it.
+For additional configuration and pre-requisites make sure to visit the official <a class="reference external" href="https://dev.mysql.com/doc/refman/8.0/en/windows-installation.html">MySQL docs</a>.</p>
+</div>
+<div class="section" id="linux-users">
+<h3>Linux users<a class="headerlink" href="#linux-users" title="Permalink to this headline">¶</a></h3>
+<p>You can install the Python and MySQL headers and libraries like so:</p>
+<p>Debian/Ubuntu:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">dev</span> <span class="n">default</span><span class="o">-</span><span class="n">libmysqlclient</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+<p>Red Hat / Centos</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">devel</span> <span class="n">mysql</span><span class="o">-</span><span class="n">devel</span>
+</pre></div>
+</div>
+<p>After installation you need to start the service with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">systemctl</span> <span class="n">start</span> <span class="n">mysql</span>
+</pre></div>
+</div>
+<p>To ensure that the database launches after a reboot:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">systemctl</span> <span class="n">enable</span> <span class="n">mysql</span>
+</pre></div>
+</div>
+<p>You should now be able to start the mysql shell through <code class="docutils literal notranslate"><span class="pre">/usr/bin/mysql</span> <span class="pre">-u</span> <span class="pre">root</span> <span class="pre">-p</span></code>
+you will be asked for the password you set during installation.</p>
+</div>
+</div>
+<div class="section" id="creating-a-virtual-environment">
+<h2>Creating a virtual environment<a class="headerlink" href="#creating-a-virtual-environment" title="Permalink to this headline">¶</a></h2>
+<p>You will need to create a virtual environment to make sure that you have the right packages and setup needed to follow along the tutorial.
+Follow the instructions that best suit your installation.</p>
+<div class="section" id="id2">
+<h3>Anaconda<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>If you are using Anaconda first you will need to make a directory for the tutorial, for example <code class="docutils literal notranslate"><span class="pre">mkdir</span> <span class="pre">airflow-tutorial</span></code>.
+Once created make sure to change into it using <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">airflow-tutorial</span></code>.</p>
+<dl class="simple">
+<dt>Next, make a copy of this <a class="reference external" href="https://raw.githubusercontent.com/trallard/airflow-tutorial/master/environment.yaml">environment.yaml</a></dt><dd><p>and install the</p>
+</dd>
+</dl>
+<p>dependencies via <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">env</span> <span class="pre">create</span> <span class="pre">-f</span> <span class="pre">environment.yml</span></code>.
+Once all the dependencies are installed you can activate your environment through the following commands</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="n">activate</span> <span class="n">airflow</span><span class="o">-</span><span class="n">env</span> <span class="c1"># Mac</span>
+<span class="n">activate</span> <span class="n">airflow</span><span class="o">-</span><span class="n">env</span>        <span class="c1"># Windows and Linux</span>
+</pre></div>
+</div>
+<p>To exit the environment you can use</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">deactivate</span> <span class="n">airflow</span><span class="o">-</span><span class="n">env</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pipenv">
+<h3>pipenv<a class="headerlink" href="#pipenv" title="Permalink to this headline">¶</a></h3>
+<p>Create a directory for the tutorial, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">airflow</span><span class="o">-</span><span class="n">tutorial</span>
+</pre></div>
+</div>
+<p>and change your working directory to this newly created one <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">airflow-tutorial</span></code>.</p>
+<p>Once then make a copy of this <a class="reference external" href="https://raw.githubusercontent.com/trallard/airflow-tutorial/master/Pipfile">Pipfile</a>
+in your new directory and install via <code class="docutils literal notranslate"><span class="pre">pipenv</span> <span class="pre">install</span></code>.
+This will install the dependencies you need. This might take a while so you can make yourself a brew in the meantime.</p>
+<p>Once all the dependencies are installed you can run <code class="docutils literal notranslate"><span class="pre">pipenv</span> <span class="pre">shell</span></code> which will start a session with the correct virtual environment activated. To exit the shell session using <code class="docutils literal notranslate"><span class="pre">exit</span></code>.</p>
+</div>
+<div class="section" id="virtualenv">
+<h3>virtualenv<a class="headerlink" href="#virtualenv" title="Permalink to this headline">¶</a></h3>
+<p>Create a directory for the tutorial, for example :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">airflow</span><span class="o">-</span><span class="n">tutorial</span>
+</pre></div>
+</div>
+<p>and change directories into it (<code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">airflow-tutorial</span></code>).
+Now you  need to run venv</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">env</span><span class="o">/</span><span class="n">airflow</span> <span class="c1"># Mac and Linux</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">env</span><span class="o">/</span><span class="n">airflow</span>  <span class="c1"># Windows</span>
+</pre></div>
+</div>
+<p>this will create a virtual Python environment in the <code class="docutils literal notranslate"><span class="pre">env/airflow</span></code> folder.
+Before installing the required packages you need to activate your virtual environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="n">env</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span> <span class="c1"># Mac and Linux</span>
+<span class="o">.</span>\<span class="n">env</span>\<span class="n">Scripts</span>\<span class="n">activate</span>  <span class="c1"># Windows</span>
+</pre></div>
+</div>
+<p>Make a copy of <a class="reference external" href="https://raw.githubusercontent.com/trallard/airflow-tutorial/master/requirements.txt">this requirements file</a>
+in your new directory.
+Now you can install the packages using via pip <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code></p>
+<p>To leave the virtual environment run <code class="docutils literal notranslate"><span class="pre">deactivate</span></code></p>
+</div>
+</div>
+<div class="section" id="twitter-and-twitter-developer-account">
+<h2>Twitter and twitter developer account<a class="headerlink" href="#twitter-and-twitter-developer-account" title="Permalink to this headline">¶</a></h2>
+<p>This tutorial uses the Twitter API for some examples and to build some of the pipelines included.</p>
+<p>Please make sure to follow the next steps to get you all set up.</p>
+<ol class="arabic">
+<li><p>Create an account at <a class="reference external" href="https://twitter.com/">https://twitter.com/</a>.</p></li>
+<li><dl>
+<dt>Next, you will need to apply for a developer account, head to <a class="reference external" href="https://developer.twitter.com/en/apply">https://developer.twitter.com/en/apply</a>.</dt><dd><p>You will need to provide detailed information about what you want to use the API for.
+Make sure to complete all the steps and confirm your email address so that you can be notified about the status of your application.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Before completing the application read the PyCon attendees section below ⬇️ <a class="reference internal" href="#pycon-tut"><span class="std std-ref">Twitter developer app</span></a></p>
+</div>
+</dd>
+</dl>
+</li>
+<li><p>Once your application has been approved you will need to go to <a class="reference external" href="https://developer.twitter.com/en/apps">https://developer.twitter.com/en/apps</a> login with your details (they should be the same as your Twitter account ones).</p></li>
+<li><dl>
+<dt>On your app dashboard click on the create an app button</dt><dd><img alt="_images/twitter1.png" src="_images/twitter1.png" />
+<p>Make sure to give it a descriptive name, something like <code class="docutils literal notranslate"><span class="pre">airflow-tutorial</span></code> or the such</p>
+</dd>
+</dl>
+</li>
+</ol>
+<p>5. Once you complete the details and create your new app you should be able to access it via the main app dashboard. Click on details button next to the app name and head over to permissions.
+We only need read permissions for the tutorial, so these should look something like this</p>
+<blockquote>
+<div><img alt="_images/twitter2.png" src="_images/twitter2.png" />
+</div></blockquote>
+<ol class="arabic" start="6">
+<li><dl>
+<dt>Now if you click on the Keys and tokens you will be able to see a set of an API key, an API secret, an Access token, and an Access secret</dt><dd><img alt="_images/twitter3.png" src="_images/twitter3.png" />
+<p>They are only valid for the permissions you specified before. Keep a record of these in a safe place as we will need them for the Airflow pipelines.</p>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="docker">
+<h2>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h2>
+<p>We are going to use Docker for some bits of the tutorial (this will make it easier to have a local Airflow instance).</p>
+<p>Follow the instructions at <a class="reference external" href="https://docs.docker.com/v17.12/install/">https://docs.docker.com/v17.12/install/</a> make sure to read the pre-requisites quite carefully before starting the installation.</p>
+<div class="section" id="pycon-attendees">
+<span id="attendees"></span><h3>🐍 PyCon attendees<a class="headerlink" href="#pycon-attendees" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="twitter-developer-app">
+<span id="pycon-tut"></span><h4>Twitter developer app<a class="headerlink" href="#twitter-developer-app" title="Permalink to this headline">¶</a></h4>
+<p>The Twitter team will be expediting your applications to make sure you are all set up for the day 😎.</p>
+<p>When filling in your application make sure to add the following details (as written here) to make sure this is processed.</p>
+<p>In the what are you planning to use the developer account for:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="n">account</span> <span class="ow">is</span> <span class="n">to</span> <span class="n">be</span> <span class="n">used</span> <span class="k">for</span> <span class="n">the</span> <span class="n">Airflow</span> <span class="n">tutorial</span> <span class="n">at</span> <span class="n">PyCon</span> <span class="n">US</span> <span class="mi">2019</span> <span class="n">lead</span> <span class="n">by</span> <span class="n">Tania</span> <span class="n">Allard</span><span class="o">.</span>
+<span class="n">We</span> <span class="n">will</span> <span class="n">be</span> <span class="n">using</span> <span class="n">the</span> <span class="n">Twitter</span> <span class="n">API</span> <span class="n">to</span> <span class="n">collect</span> <span class="n">tweets</span><span class="p">,</span> <span class="n">setting</span> <span class="n">a</span> <span class="n">database</span> <span class="ow">and</span> <span class="n">create</span> <span class="n">ETL</span> <span class="n">pipelines</span> <span class="k">as</span> <span class="n">part</span> <span class="n">of</span> <span class="n">the</span> <span class="n">tutorial</span><span class="o">.</span>
+<span class="n">This</span> <span class="n">will</span> <span class="n">be</span> <span class="n">integrated</span> <span class="n">into</span> <span class="n">Airflow</span> <span class="ow">and</span> <span class="n">no</span> <span class="n">personally</span> <span class="n">identifiable</span> <span class="n">data</span> <span class="n">will</span> <span class="n">be</span> <span class="n">used</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">process</span><span class="o">.</span>
+<span class="n">We</span> <span class="n">will</span> <span class="ow">not</span> <span class="n">be</span> <span class="n">conducting</span> <span class="n">text</span> <span class="n">analysis</span><span class="p">,</span> <span class="n">user</span> <span class="n">details</span> <span class="n">analysis</span> <span class="ow">or</span> <span class="nb">any</span> <span class="n">sort</span> <span class="n">of</span> <span class="n">surveillance</span> <span class="n">process</span> <span class="k">as</span> <span class="n">part</span> <span class="n">of</span> <span class="n">the</span> <span class="n">tutorial</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="azure-pass-account">
+<h4>Azure Pass account<a class="headerlink" href="#azure-pass-account" title="Permalink to this headline">¶</a></h4>
+<p>As a PyCon attendee, you will be issued with an Azure pass worth 200 dollars with a 90 days validity.
+You will not need to add credit card details to activate but you will need to follow this process to redeem your credits.</p>
+<p>1. Send an email your facilitator at <a class="reference external" href="mailto:trallard&#37;&#52;&#48;bitsandchips&#46;me">trallard<span>&#64;</span>bitsandchips<span>&#46;</span>me</a> with the subject line <code class="docutils literal notranslate"><span class="pre">Airflow</span> <span class="pre">PyCon-</span> <span class="pre">Azure</span> <span class="pre">Pass</span></code>, they will send you an email with a <cite>unique</cite> code to redeem. Please do not share with anyone,
+this is a single-use pass and once activated it will be invalid.</p>
+<p>2. Go to <a class="reference external" href="https://www.microsoftazurepass.com/?wt.mc_id=PyCon-github-taallard">this site</a> to redeem your pass.
+We recommend doing this in a private/incognito window. You can then click start and attach your new pass to your existing account.</p>
+<p>If you see the following error (see image)</p>
+<img alt="_images/mssignin.png" src="_images/mssignin.png" />
+<p>you can go to <a class="reference external" href="https://signup.live.com//?wt.mc_id=PyCon-github-taallard">this site</a>  to register the email and proceed.</p>
+<p>4. Confirm your email address. You will then be asked to add the promo code that you were sent by your instructor.
+Do not close or refresh the window until you have received a confirmation that this has been successful.</p>
+<img alt="_images/4.jpg" src="_images/4.jpg" />
+<ol class="arabic simple" start="5">
+<li><p>Activate your subscription: click on the activate button and fill in the personal details</p></li>
+</ol>
+<p>Again once completed, do not refresh the window until you see this image</p>
+<img alt="_images/12.png" src="_images/12.png" />
+<p>At this point, your subscription will be ready, click on Get started to go to your Azure portal</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="index.html" title="Previous document">Airflow tutorial</a>
+        </li>
+        <li>
+          <a href="about.html" title="Next document">About the workshop</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/python.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">a.k.a an introduction to all things DAGS and pipelines joy</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=trallard&repo=airflow-tutorial&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Setup</a><ul>
+<li><a class="reference internal" href="#python-3-x">Python 3.x</a></li>
+<li><a class="reference internal" href="#git">Git</a><ul>
+<li><a class="reference internal" href="#windows">Windows</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#github">GitHub</a></li>
+<li><a class="reference internal" href="#text-editors-ides">Text Editors/IDEs</a></li>
+<li><a class="reference internal" href="#microsoft-azure">Microsoft Azure</a></li>
+<li><a class="reference internal" href="#mysql">MySQL</a><ul>
+<li><a class="reference internal" href="#mac-users">Mac users</a><ul>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#windows-users">Windows users</a></li>
+<li><a class="reference internal" href="#linux-users">Linux users</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-a-virtual-environment">Creating a virtual environment</a><ul>
+<li><a class="reference internal" href="#id2">Anaconda</a></li>
+<li><a class="reference internal" href="#pipenv">pipenv</a></li>
+<li><a class="reference internal" href="#virtualenv">virtualenv</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#twitter-and-twitter-developer-account">Twitter and twitter developer account</a></li>
+<li><a class="reference internal" href="#docker">Docker</a><ul>
+<li><a class="reference internal" href="#pycon-attendees">🐍 PyCon attendees</a><ul>
+<li><a class="reference internal" href="#twitter-developer-app">Twitter developer app</a></li>
+<li><a class="reference internal" href="#azure-pass-account">Azure Pass account</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#python-3-x">Python 3.x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#git">Git</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#github">GitHub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#text-editors-ides">Text Editors/IDEs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#microsoft-azure">Microsoft Azure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mysql">MySQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-virtual-environment">Creating a virtual environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#twitter-and-twitter-developer-account">Twitter and twitter developer account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#docker">Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About the workshop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="airflow-intro.html">Airflow basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first-airflow.html">Airflow 101: working locally and familiarise with the tool</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Airflow tutorial</a></li>
+      <li>Next: <a href="about.html" title="next chapter">About the workshop</a></li>
+  </ul></li>
+</ul>
+</div><p><iframe src="https://ghbtns.com/github-btn.html?user=trallard&type=follow&count=false" allowtransparency="true"
+        frameborder="0" scrolling="0" width="200" height="20"></iframe></p>
+
+<p><a href="https://twitter.com/ixek" class="twitter-follow-button" data-show-count="false">Follow @ixek</a>
+    <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + '://platform.twitter.com/widgets.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'twitter-wjs');</script>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Tania Allard.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/setup.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

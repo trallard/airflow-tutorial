@@ -1,0 +1,376 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Airflow 101: working locally and familiarise with the tool &#8212; Airflow tutorial  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Airflow basics" href="airflow-intro.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="airflow-intro.html" title="Previous document">Airflow basics</a>
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="airflow-101-working-locally-and-familiarise-with-the-tool">
+<h1>Airflow 101: working locally and familiarise with the tool<a class="headerlink" href="#airflow-101-working-locally-and-familiarise-with-the-tool" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pre-requisites">
+<h2>Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h2>
+<p>The following prerequisites are needed:</p>
+<ul class="simple">
+<li><p>Libraries detailed in the Setting up section (either via conda or pipenv)</p></li>
+<li><p>MySQL installed</p></li>
+<li><p>text editor</p></li>
+<li><p>command line</p></li>
+</ul>
+</div>
+<div class="section" id="getting-your-environment-up-and-running">
+<h2>Getting your environment up and running<a class="headerlink" href="#getting-your-environment-up-and-running" title="Permalink to this headline">¶</a></h2>
+<p>If you followed the instructions you should have Airflow installed as well as the rest of the packages we will be using.</p>
+<p>So let’s get our environment up and running:</p>
+<p>If you are using conda start your environment via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ source activate airflow-env
+</pre></div>
+</div>
+<p>If using pipenv then:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pipenv shell
+</pre></div>
+</div>
+<p>this will start a shell within a virtual environment, to exit the shell you need to type <code class="docutils literal notranslate"><span class="pre">exit</span></code> and this will exit the virtual environment.</p>
+</div>
+<div class="section" id="starting-airflow-locally">
+<h2>Starting Airflow locally<a class="headerlink" href="#starting-airflow-locally" title="Permalink to this headline">¶</a></h2>
+<p>Airflow home lives in <code class="docutils literal notranslate"><span class="pre">~/airflow</span></code> by default, but you can change the location before installing airflow. You first need to set the <code class="docutils literal notranslate"><span class="pre">AIRFLOW_HOME</span></code> environment variable and then install airflow. For example, using pip:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">AIRFLOW_HOME</span><span class="o">=</span>~/mydir/airflow
+
+<span class="c1"># install from PyPI using pip</span>
+pip install apache-airflow
+</pre></div>
+</div>
+<p>once you have completed the installation you should see something like this in the <code class="docutils literal notranslate"><span class="pre">airflow</span></code> directory (wherever it lives for you)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>drwxr-xr-x    - myuser 18 Apr 14:02 .
+.rw-r--r--  26k myuser 18 Apr 14:02 ├── airflow.cfg
+drwxr-xr-x    - myuser 18 Apr 14:02 ├── logs
+drwxr-xr-x    - myuser 18 Apr 14:02 │  └── scheduler
+drwxr-xr-x    - myuser 18 Apr 14:02 │     ├── 2019-04-18
+lrwxr-xr-x   46 myuser 18 Apr 14:02 │     └── latest -&gt; /Users/myuser/airflow/logs/scheduler/2019-04-18
+.rw-r--r-- 2.5k myuser 18 Apr 14:02 └── unittests.cfg
+</pre></div>
+</div>
+<p>We need to create a local dag folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">~/</span><span class="n">airflow</span><span class="o">/</span><span class="n">dags</span>
+</pre></div>
+</div>
+<p>As your project evolves, your directory will look something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>airflow                  # the root directory.
+├── dags                 # root folder for all dags. files inside folders are not searched for dags.
+│   ├── my_dag.py, # my dag (definitions of tasks/operators) including precedence.
+│   └── ...
+├── logs                 # logs for the various tasks that are run
+│   └── my_dag           # DAG specific logs
+│   │   ├── src1_s3      # folder for task-specific logs (log files are created by date of a run)
+│   │   ├── src2_hdfs
+│   │   ├── src3_s3
+│   │   └── spark_task_etl
+├── airflow.db           # SQLite database used by Airflow internally to track the status of each DAG.
+├── airflow.cfg          # global configuration for Airflow (this can be overridden by config inside the file.)
+└── ...
+</pre></div>
+</div>
+</div>
+<div class="section" id="prepare-your-database">
+<h2>Prepare your database<a class="headerlink" href="#prepare-your-database" title="Permalink to this headline">¶</a></h2>
+<p>As we mentioned before Airflow uses a database to keep track of the tasks and their statuses. So it is critical to have one set up.</p>
+<p>To start the default database we can run
+<code class="docutils literal notranslate"><span class="pre">airflow</span> <span class="pre">initdb</span></code>. This will initialize your database via alembic so that it matches the latest Airflow release.</p>
+<p>The default database used is <code class="docutils literal notranslate"><span class="pre">sqlite</span></code> which means you cannot parallelize tasks using this database. Since we have MySQL and MySQL client installed we will set them up so that we can use them with airflow.</p>
+<p>🚦Create an airflow database</p>
+<p>From the command line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MySQL</span> <span class="o">-</span><span class="n">u</span> <span class="n">root</span> <span class="o">-</span><span class="n">p</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="n">CREATE</span> <span class="n">DATABASE</span> <span class="n">airflow</span> <span class="n">CHARACTER</span> <span class="n">SET</span> <span class="n">utf8</span> <span class="n">COLLATE</span> <span class="n">utf8_unicode_ci</span><span class="p">;</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="n">GRANT</span> <span class="n">ALL</span> <span class="n">PRIVILEGES</span> <span class="n">ON</span> <span class="n">airflow</span><span class="o">.*</span> <span class="n">To</span> <span class="s1">&#39;airflow&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="n">FLUSH</span> <span class="n">PRIVILEGES</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>and initialize the database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">initdb</span>
+</pre></div>
+</div>
+<p>Notice that this will fail with the default <code class="docutils literal notranslate"><span class="pre">airflow.cfg</span></code></p>
+</div>
+<div class="section" id="update-your-local-configuration">
+<h2>Update your local configuration<a class="headerlink" href="#update-your-local-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Open your airflow configuration file <code class="docutils literal notranslate"><span class="pre">~/airflow/airflow.cf</span></code> and make the following changes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">executor</span> <span class="o">=</span> <span class="n">CeleryExecutor</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># http://docs.celeryproject.org/en/latest/userguide/configuration.html#broker-settings</span>
+<span class="c1"># needs rabbitmq running</span>
+<span class="n">broker_url</span> <span class="o">=</span> <span class="n">amqp</span><span class="p">:</span><span class="o">//</span><span class="n">guest</span><span class="p">:</span><span class="n">guest</span><span class="nd">@127</span><span class="o">.</span><span class="mf">0.0</span><span class="o">.</span><span class="mi">1</span><span class="o">/</span>
+
+
+<span class="c1"># http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-result-backend-settings</span>
+<span class="n">result_backend</span> <span class="o">=</span> <span class="n">db</span><span class="o">+</span><span class="n">mysql</span><span class="p">:</span><span class="o">//</span><span class="n">airflow</span><span class="p">:</span><span class="n">airflow</span><span class="nd">@localhost</span><span class="p">:</span><span class="mi">3306</span><span class="o">/</span><span class="n">airflow</span>
+
+<span class="n">sql_alchemy_conn</span> <span class="o">=</span> <span class="n">mysql</span><span class="p">:</span><span class="o">//</span><span class="n">airflow</span><span class="p">:</span><span class="n">python2019</span><span class="nd">@localhost</span><span class="p">:</span><span class="mi">3306</span><span class="o">/</span><span class="n">airflow</span>
+</pre></div>
+</div>
+<p>Here we are replacing the default executor (<code class="docutils literal notranslate"><span class="pre">SequentialExecutor</span></code>) with the <code class="docutils literal notranslate"><span class="pre">CeleryExecutor</span></code> so that we can run multiple DAGs in parallel.
+We also replace the default <code class="docutils literal notranslate"><span class="pre">sqlite</span></code> database with our newly created <code class="docutils literal notranslate"><span class="pre">airflow</span></code> database.</p>
+<p>Now we can initialize the database:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">initdb</span>
+</pre></div>
+</div>
+<p>Let’s now start the web server locally:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">webserver</span> <span class="o">-</span><span class="n">p</span> <span class="mi">8080</span>
+</pre></div>
+</div>
+<p>we can head over to <a class="reference external" href="http://localhost:8080">http://localhost:8080</a> now and you will see that there are a number of examples DAGS already there.</p>
+<p>🚦 Take some time to familiarise with the UI and get your local instance set up</p>
+<p>Now let’s have a look at the connections (<a class="reference external" href="http://localhost:8080/admin/connection/">http://localhost:8080/admin/connection/</a>) go to <code class="docutils literal notranslate"><span class="pre">admin</span> <span class="pre">&gt;</span> <span class="pre">connections</span></code>. You should be able to see a number of connections available. For this tutorial, we will use some of the connections including  <code class="docutils literal notranslate"><span class="pre">mysql</span></code>.</p>
+<!-- For example, if you have `mysql` running but you have a different password for the root user you can edit it by clicking on the connection name.
+
+
+🚦Now let's create a db for our local project
+
+![](_static/connection.png) --><div class="section" id="commands">
+<h3>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h3>
+<p>Let us go over some of the commands. Back on your command line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">list_dags</span>
+</pre></div>
+</div>
+<p>we can list the DAG tasks in a tree view</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">list_tasks</span> <span class="n">tutorial</span> <span class="o">--</span><span class="n">tree</span>
+</pre></div>
+</div>
+<p>we can tests the dags too, but we will need to set a date parameter so that this executes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">test</span> <span class="n">tutorial</span> <span class="n">print_date</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">01</span>
+</pre></div>
+</div>
+<p>(note that you cannot use a future date or you will get an error)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">test</span> <span class="n">tutorial</span> <span class="n">templated</span> <span class="mi">2019</span><span class="o">-</span><span class="mi">05</span><span class="o">-</span><span class="mi">01</span>
+</pre></div>
+</div>
+<p>By using the test commands these are not saved in the database.</p>
+<p>Now let’s start the scheduler:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">scheduler</span>
+</pre></div>
+</div>
+<p>Behind the scenes, it monitors and stays in sync with a folder for all DAG objects it contains. The Airflow scheduler is designed to run as a service in an Airflow production environment.</p>
+<p>Now with the schedule up and running we can trigger an instance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ airflow run airflow run example_bash_operator runme_0 2015-01-01
+</pre></div>
+</div>
+<p>This will be stored in the database and you can see the change of the status change straight away.</p>
+<p>What would happen for example if we wanted to run or trigger the <code class="docutils literal notranslate"><span class="pre">tutorial</span></code> task? 🤔</p>
+<p>Let’s try from the CLI and see what happens.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">airflow</span> <span class="n">trigger_dag</span> <span class="n">tutorial</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="writing-your-first-dag">
+<h2>Writing your first DAG<a class="headerlink" href="#writing-your-first-dag" title="Permalink to this headline">¶</a></h2>
+<p>Let’s create our first simple DAG.
+Inside the dag directory (<code class="docutils literal notranslate"><span class="pre">~/airflow/dags)</span></code> create a <code class="docutils literal notranslate"><span class="pre">simple_dag.py</span></code> file.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">airflow</span> <span class="kn">import</span> <span class="n">DAG</span>
+<span class="kn">from</span> <span class="nn">airflow.operators.dummy_operator</span> <span class="kn">import</span> <span class="n">DummyOperator</span>
+<span class="kn">from</span> <span class="nn">airflow.operators.python_operator</span> <span class="kn">import</span> <span class="n">PythonOperator</span>
+
+
+<span class="k">def</span> <span class="nf">print_hello</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;Hello world!&quot;</span>
+
+
+<span class="n">default_args</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;owner&quot;</span><span class="p">:</span> <span class="s2">&quot;airflow&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;depends_on_past&quot;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2019</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+    <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;airflow@example.com&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;email_on_failure&quot;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="s2">&quot;email_on_retry&quot;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="s2">&quot;retries&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;retry_delay&quot;</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="p">}</span>
+
+<span class="n">dag</span> <span class="o">=</span> <span class="n">DAG</span><span class="p">(</span>
+    <span class="s2">&quot;hello_world&quot;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Simple tutorial DAG&quot;</span><span class="p">,</span>
+    <span class="n">schedule_interval</span><span class="o">=</span><span class="s2">&quot;0 12 * * *&quot;</span><span class="p">,</span>
+    <span class="n">default_args</span><span class="o">=</span><span class="n">default_args</span><span class="p">,</span>
+    <span class="n">catchup</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">t1</span> <span class="o">=</span> <span class="n">DummyOperator</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="s2">&quot;dummy_task&quot;</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">dag</span><span class="o">=</span><span class="n">dag</span><span class="p">)</span>
+
+<span class="n">t2</span> <span class="o">=</span> <span class="n">PythonOperator</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="s2">&quot;hello_task&quot;</span><span class="p">,</span> <span class="n">python_callable</span><span class="o">=</span><span class="n">print_hello</span><span class="p">,</span> <span class="n">dag</span><span class="o">=</span><span class="n">dag</span><span class="p">)</span>
+
+<span class="c1"># sets downstream foe t1</span>
+<span class="n">t1</span> <span class="o">&gt;&gt;</span> <span class="n">t2</span>
+
+<span class="c1"># equivalent</span>
+<span class="c1"># t2.set_upstream(t1)</span>
+</pre></div>
+</div>
+<p>If it is properly setup you should be able to see this straight away on your instance.</p>
+<div class="section" id="now-let-s-create-a-dag-from-the-previous-etl-pipeline-kind-of">
+<h3>Now let’s create a DAG from the previous ETL pipeline (kind of)<a class="headerlink" href="#now-let-s-create-a-dag-from-the-previous-etl-pipeline-kind-of" title="Permalink to this headline">¶</a></h3>
+<p>All hands on - check the solutions</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="airflow-intro.html" title="Previous document">Airflow basics</a>
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/python.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">a.k.a an introduction to all things DAGS and pipelines joy</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=trallard&repo=airflow-tutorial&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Airflow 101: working locally and familiarise with the tool</a><ul>
+<li><a class="reference internal" href="#pre-requisites">Pre-requisites</a></li>
+<li><a class="reference internal" href="#getting-your-environment-up-and-running">Getting your environment up and running</a></li>
+<li><a class="reference internal" href="#starting-airflow-locally">Starting Airflow locally</a></li>
+<li><a class="reference internal" href="#prepare-your-database">Prepare your database</a></li>
+<li><a class="reference internal" href="#update-your-local-configuration">Update your local configuration</a><ul>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#writing-your-first-dag">Writing your first DAG</a><ul>
+<li><a class="reference internal" href="#now-let-s-create-a-dag-from-the-previous-etl-pipeline-kind-of">Now let’s create a DAG from the previous ETL pipeline (kind of)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About the workshop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="airflow-intro.html">Airflow basics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Airflow 101: working locally and familiarise with the tool</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pre-requisites">Pre-requisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-your-environment-up-and-running">Getting your environment up and running</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#starting-airflow-locally">Starting Airflow locally</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prepare-your-database">Prepare your database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#update-your-local-configuration">Update your local configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-your-first-dag">Writing your first DAG</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="airflow-intro.html" title="previous chapter">Airflow basics</a></li>
+  </ul></li>
+</ul>
+</div><p><iframe src="https://ghbtns.com/github-btn.html?user=trallard&type=follow&count=false" allowtransparency="true"
+        frameborder="0" scrolling="0" width="200" height="20"></iframe></p>
+
+<p><a href="https://twitter.com/ixek" class="twitter-follow-button" data-show-count="false">Follow @ixek</a>
+    <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + '://platform.twitter.com/widgets.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'twitter-wjs');</script>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Tania Allard.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/first-airflow.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

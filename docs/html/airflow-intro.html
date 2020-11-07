@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Airflow basics &#8212; Airflow tutorial  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Airflow 101: working locally and familiarise with the tool" href="first-airflow.html" />
+    <link rel="prev" title="Pipelines" href="pipelines.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="pipelines.html" title="Previous document">Pipelines</a>
+        </li>
+        <li>
+          <a href="first-airflow.html" title="Next document">Airflow 101: working locally and familiarise with the tool</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="airflow-basics">
+<h1>Airflow basics<a class="headerlink" href="#airflow-basics" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-airflow">
+<h2>What is Airflow?<a class="headerlink" href="#what-is-airflow" title="Permalink to this headline">¶</a></h2>
+<p><img alt="_images/airflow-logo.jpeg" src="_images/airflow-logo.jpeg" />airflow logo</p>
+<p>Airflow is a Workflow engine which means:</p>
+<ul class="simple">
+<li><p>Manage scheduling and running jobs and data pipelines</p></li>
+<li><p>Ensures jobs are ordered correctly based on dependencies</p></li>
+<li><p>Manage the allocation of scarce resources</p></li>
+<li><p>Provides mechanisms for tracking the state of jobs and recovering from failure</p></li>
+</ul>
+<p>It is highly versatile and can be used across many many domains:
+<img alt="_images/uses.png" src="_images/uses.png" /></p>
+</div>
+<div class="section" id="basic-airflow-concepts">
+<h2>Basic Airflow concepts<a class="headerlink" href="#basic-airflow-concepts" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Task</strong>: a defined unit of work (these are called operators in Airflow)</p></li>
+<li><p><strong>Task instance</strong>: an individual run of a single task. Task instances also have an indicative state, which could be “running”, “success”, “failed”, “skipped”, “up for retry”, etc.</p></li>
+<li><p><strong>DAG</strong>: Directed acyclic graph,
+a set of tasks with explicit execution order, beginning, and end</p></li>
+<li><p><strong>DAG run</strong>: individual execution/run of a DAG</p></li>
+</ul>
+<p><strong>Debunking the DAG</strong></p>
+<p>The vertices and edges (the arrows linking the nodes) have an order and direction associated to them</p>
+<p><img alt="_images/DAG.png" src="_images/DAG.png" /></p>
+<p>each node in a DAG corresponds to a task, which in turn represents some sort of data processing. For example:</p>
+<p>Node A could be the code for pulling data from an API, node B could be the code for anonymizing the data. Node B could be the code for checking that there are no duplicate records, and so on.</p>
+<p>These ‘pipelines’ are acyclic since they need a point of completion.</p>
+<p><strong>Dependencies</strong></p>
+<p>Each of the vertices has a particular direction that shows the relationship between certain nodes. For example, we can only anonymize data once this has been pulled out from the API.</p>
+</div>
+<div class="section" id="idempotency">
+<h2>Idempotency<a class="headerlink" href="#idempotency" title="Permalink to this headline">¶</a></h2>
+<p>This is one of the most important characteristics of good ETL architectures.</p>
+<p>When we say that something is idempotent it means it will produce the same result regardless of how many times this is run (i.e. the results are reproducible).</p>
+<p>Reproducibility is particularly important in data-intensive environments as this ensures that the same inputs will always return the same outputs.</p>
+</div>
+<div class="section" id="airflow-components">
+<h2>Airflow components<a class="headerlink" href="#airflow-components" title="Permalink to this headline">¶</a></h2>
+<p><img alt="_images/architecture.png" src="_images/architecture.png" /></p>
+<p>There are 4 main components to Apache Airflow:</p>
+<div class="section" id="web-server">
+<h3>Web server<a class="headerlink" href="#web-server" title="Permalink to this headline">¶</a></h3>
+<p>The GUI. This is under the hood a Flask app where you can track the status of your jobs and read logs from a remote file store (e.g. <a class="reference external" href="https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blobs-overview/?wt.mc_id=PyCon-github-taallard">Azure Blobstorage</a>).</p>
+</div>
+<div class="section" id="scheduler">
+<h3>Scheduler<a class="headerlink" href="#scheduler" title="Permalink to this headline">¶</a></h3>
+<p>This component is responsible for scheduling jobs. This is a multithreaded Python process that uses the DAGb object to decide what tasks need to be run, when and where.</p>
+<p>The task state is retrieved and updated from the database accordingly. The web server then uses these saved states to display job information.</p>
+</div>
+<div class="section" id="executor">
+<h3>Executor<a class="headerlink" href="#executor" title="Permalink to this headline">¶</a></h3>
+<p>The mechanism that gets the tasks done.</p>
+</div>
+<div class="section" id="metadata-database">
+<h3>Metadata database<a class="headerlink" href="#metadata-database" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Powers how the other components interact</p></li>
+<li><p>Stores the Airflow states</p></li>
+<li><p>All processes read and write from here</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="workflow-as-a-code">
+<h2>Workflow as a code<a class="headerlink" href="#workflow-as-a-code" title="Permalink to this headline">¶</a></h2>
+<p>One of the main advantages of using a workflow system like Airflow is that all is code, which makes your workflows maintainable, versionable, testable, and collaborative.</p>
+<p>Thus your workflows become more explicit and maintainable (atomic tasks).</p>
+<p>Not only your code is dynamic but also is your infrastructure.</p>
+<div class="section" id="defining-tasks">
+<h3>Defining tasks<a class="headerlink" href="#defining-tasks" title="Permalink to this headline">¶</a></h3>
+<p>Tasks are defined based on the abstraction of <code class="docutils literal notranslate"><span class="pre">Operators</span></code> (see Airflow docs <a class="reference external" href="https://airflow.apache.org/concepts.html#operators">here</a>) which represent a single <strong>idempotent task</strong>.</p>
+<p>The best practice is to have atomic operators (i.e. can stand on their own and do not need to share resources among them).</p>
+<p>You can choose among;</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">BashOperator</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PythonOperator</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EmailOperator</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SimpleHttpOperator</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MySqlOperator</span></code> (and other DB)</p></li>
+</ul>
+<p>Examples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">t1</span> <span class="o">=</span> <span class="n">BashOperator</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="s1">&#39;print_date&#39;</span><span class="p">,</span>
+    <span class="n">bash_command</span><span class="o">=</span><span class="s1">&#39;date,</span>
+    <span class="n">dag</span><span class="o">=</span><span class="n">dag</span><span class="p">)</span> 
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">print_context</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">pprint</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">&#39;Whatever you return gets printed in the logs&#39;</span>
+
+
+<span class="n">run_this</span> <span class="o">=</span> <span class="n">PythonOperator</span><span class="p">(</span>
+    <span class="n">task_id</span><span class="o">=</span><span class="s1">&#39;print_the_context&#39;</span><span class="p">,</span>
+    <span class="n">provide_context</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">python_callable</span><span class="o">=</span><span class="n">print_context</span><span class="p">,</span>
+    <span class="n">dag</span><span class="o">=</span><span class="n">dag</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="comparing-luigi-and-airflow">
+<h2>Comparing Luigi and Airflow<a class="headerlink" href="#comparing-luigi-and-airflow" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="luigi">
+<h3>Luigi<a class="headerlink" href="#luigi" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Created at Spotify (named after the plumber)</p></li>
+<li><p>Open sourced in late 2012</p></li>
+<li><p>GNU make for data</p></li>
+</ul>
+</div>
+<div class="section" id="airflow">
+<h3>Airflow<a class="headerlink" href="#airflow" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Airbnb data team</p></li>
+<li><p>Open-sourced mud 2015</p></li>
+<li><p>Apache incubator mid-2016</p></li>
+<li><p>ETL pipelines</p></li>
+</ul>
+</div>
+<div class="section" id="similarities">
+<h3>Similarities<a class="headerlink" href="#similarities" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Python open source projects for data pipelines</p></li>
+<li><p>Integrate with a number of sources (databases, filesystems)</p></li>
+<li><p>Tracking failure, retries, success</p></li>
+<li><p>Ability to identify the dependencies and execution</p></li>
+</ul>
+</div>
+<div class="section" id="differences">
+<h3>Differences<a class="headerlink" href="#differences" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Scheduler support: Airflow has built-in support using schedulers</p></li>
+<li><p>Scalability: Airflow has had stability issues in the past</p></li>
+<li><p>Web interfaces</p></li>
+</ul>
+<p><img alt="_images/luigi.png" src="_images/luigi.png" /></p>
+<p><img alt="_images/airflow.png" src="_images/airflow.png" /></p>
+<p>| Airflow                                          | Luigi                                                                          |
+| ———————————————— | —————————————————————————— |
+| Task are defined by<code class="docutils literal notranslate"><span class="pre">dag_id</span></code> defined by user name | Task are defined by task name and parameters                                   |
+| Task retries based on definitions                | Decide if a task is done via input/output                                      |
+| Task code to the worker                          | Workers started by Python file where the tasks are defined                     |
+| Centralized scheduler (Celery spins up workers)  | Centralized scheduler in charge of deduplication sending tasks (Tornado based) |</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="pipelines.html" title="Previous document">Pipelines</a>
+        </li>
+        <li>
+          <a href="first-airflow.html" title="Next document">Airflow 101: working locally and familiarise with the tool</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/python.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">a.k.a an introduction to all things DAGS and pipelines joy</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=trallard&repo=airflow-tutorial&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Airflow basics</a><ul>
+<li><a class="reference internal" href="#what-is-airflow">What is Airflow?</a></li>
+<li><a class="reference internal" href="#basic-airflow-concepts">Basic Airflow concepts</a></li>
+<li><a class="reference internal" href="#idempotency">Idempotency</a></li>
+<li><a class="reference internal" href="#airflow-components">Airflow components</a><ul>
+<li><a class="reference internal" href="#web-server">Web server</a></li>
+<li><a class="reference internal" href="#scheduler">Scheduler</a></li>
+<li><a class="reference internal" href="#executor">Executor</a></li>
+<li><a class="reference internal" href="#metadata-database">Metadata database</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#workflow-as-a-code">Workflow as a code</a><ul>
+<li><a class="reference internal" href="#defining-tasks">Defining tasks</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#comparing-luigi-and-airflow">Comparing Luigi and Airflow</a><ul>
+<li><a class="reference internal" href="#luigi">Luigi</a></li>
+<li><a class="reference internal" href="#airflow">Airflow</a></li>
+<li><a class="reference internal" href="#similarities">Similarities</a></li>
+<li><a class="reference internal" href="#differences">Differences</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About the workshop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelines.html">Pipelines</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Airflow basics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-airflow">What is Airflow?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-airflow-concepts">Basic Airflow concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#idempotency">Idempotency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#airflow-components">Airflow components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#workflow-as-a-code">Workflow as a code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparing-luigi-and-airflow">Comparing Luigi and Airflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="first-airflow.html">Airflow 101: working locally and familiarise with the tool</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="pipelines.html" title="previous chapter">Pipelines</a></li>
+      <li>Next: <a href="first-airflow.html" title="next chapter">Airflow 101: working locally and familiarise with the tool</a></li>
+  </ul></li>
+</ul>
+</div><p><iframe src="https://ghbtns.com/github-btn.html?user=trallard&type=follow&count=false" allowtransparency="true"
+        frameborder="0" scrolling="0" width="200" height="20"></iframe></p>
+
+<p><a href="https://twitter.com/ixek" class="twitter-follow-button" data-show-count="false">Follow @ixek</a>
+    <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + '://platform.twitter.com/widgets.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'twitter-wjs');</script>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Tania Allard.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/airflow-intro.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

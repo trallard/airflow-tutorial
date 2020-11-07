@@ -1,0 +1,752 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Pipelines &#8212; Airflow tutorial  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Airflow basics" href="airflow-intro.html" />
+    <link rel="prev" title="About the workshop" href="about.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="about.html" title="Previous document">About the workshop</a>
+        </li>
+        <li>
+          <a href="airflow-intro.html" title="Next document">Airflow basics</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="pipelines">
+<h1>Pipelines<a class="headerlink" href="#pipelines" title="Permalink to this headline">¶</a></h1>
+<p><img alt="_images/automation1.jpg" src="_images/automation1.jpg" /></p>
+<p>Automation helps us speed those manual boring tasks. The ability to automate means you can spend time working on other more thought-intensive projects.</p>
+<p>Automation adds monitoring and logging tasks:</p>
+<p>| ✅ <strong>Easy to automate</strong>                 | ❌ <strong>Difficult to automate</strong>      |
+| ————————————– | ——————————– |
+| Regularly scheduled reports            | One-off or non-scheduled tasks   |
+| Clear success/failure outcomes         | Unclear success/failure outcomes |
+| Input that can be handled via machines | Requires deeper human input      |</p>
+<div class="section" id="steps-to-automation">
+<h2>Steps to automation<a class="headerlink" href="#steps-to-automation" title="Permalink to this headline">¶</a></h2>
+<p>Whenever you consider automating a task ask the following questions:</p>
+<ul class="simple">
+<li><p>When should this task begin?</p></li>
+<li><p>Does this task have a time limit?</p></li>
+<li><p>What are the inputs for this task?</p></li>
+<li><p>What is success or failure within this task? (How can we clearly identify the outcomes?)</p></li>
+<li><p>If the task fails what should happen?</p></li>
+<li><p>What does the task provide or produce? In what way? To whom?</p></li>
+<li><p>What (if anything) should happen after the task concludes?</p></li>
+</ul>
+<div class="alert alert-primary">
+  <h4> Top tip </h4>
+  If your project is too large or loosely defined, try breaking it up into smaller tasks and automate a few of those tasks. Perhaps your task involves a report which downloads two datasets, runs cleanup and analysis, and then sends the results to different groups depending on the outcome. 
+  You can break this task into subtasks, automating each step. If any of these subtasks fail, stop the chain and alert the whoever is responsible for maintaining the script so it can be investigated further.
+</div></div>
+<div class="section" id="what-is-a-data-pipeline">
+<h2>What is a data pipeline?<a class="headerlink" href="#what-is-a-data-pipeline" title="Permalink to this headline">¶</a></h2>
+<p>Roughly this is how all pipelines look like:</p>
+<p><img alt="https://i1.wp.com/datapipesoft.com/wp-content/uploads/2017/05/data-pipeline.png?fit=651%2C336&amp;ssl=1" src="https://i1.wp.com/datapipesoft.com/wp-content/uploads/2017/05/data-pipeline.png?fit=651%2C336&amp;ssl=1" /></p>
+<p>they consist mainly of three distinct parts: data engineering processes, data preparation, and analytics. The upstream steps and quality of data determine in great measure the performance and quality of the subsequent steps.</p>
+</div>
+<div class="section" id="why-do-pipelines-matter">
+<h2>Why do pipelines matter?<a class="headerlink" href="#why-do-pipelines-matter" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Analytics and batch processing is mission-critical as they power all data-intensive applications</p></li>
+<li><p>The complexity of the data sources and demands increase every day</p></li>
+<li><p>A lot of time is invested in writing, monitoring jobs, and troubleshooting issues.</p></li>
+</ul>
+<p>This makes data engineering one of the most critical foundations of the whole analytics cycle.</p>
+<div class="section" id="good-data-pipelines-are">
+<h3>Good data pipelines are:<a class="headerlink" href="#good-data-pipelines-are" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Reproducible: same code, same data, same environment -&gt; same outcome</p></li>
+<li><p>Easy to productise: need minimal modifications from R&amp;D to production</p></li>
+<li><p>Atomic: broken into smaller well-defined tasks</p></li>
+</ul>
+<p>When working with data pipelines always remember these two statements:</p>
+<p><img alt="_images/gooddata.png" src="_images/gooddata.png" /></p>
+<hr class="docutils" />
+<p><img alt="_images/gooddata1.png" src="_images/gooddata1.png" /></p>
+<p>As your data engineering and data quality demands increase so does the complexity of the processes. So more often than not you will eventually need a workflow manager to help you with the orchestration of such processes.</p>
+<div class="alert alert-custom">
+Think of a workflow manager as:<p>GNU Make + Unix pipes + Steroids</p>
+</div></div>
+</div>
+<hr class="docutils" />
+<div class="section" id="creating-your-first-etl-pipeline-in-python">
+<h2>⭐️ Creating your first ETL pipeline in Python<a class="headerlink" href="#creating-your-first-etl-pipeline-in-python" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="setting-your-local-database">
+<h3>Setting your local database<a class="headerlink" href="#setting-your-local-database" title="Permalink to this headline">¶</a></h3>
+<p>Let’s us access your local MySQL from the command line, type the following on the command line:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>MySQL -u root -p
+</pre></div>
+</div>
+<p>followed by your MySQL password (this was done as part of your setup)</p>
+<p>you should see the following message as well as a change in your prompt:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Welcome</span> <span class="n">to</span> <span class="n">the</span> <span class="n">MySQL</span> <span class="n">monitor</span><span class="o">.</span>  <span class="n">Commands</span> <span class="n">end</span> <span class="k">with</span><span class="p">;</span> <span class="ow">or</span> \<span class="n">g</span><span class="o">.</span>
+<span class="n">Your</span> <span class="n">MySQL</span> <span class="n">connection</span> <span class="nb">id</span> <span class="ow">is</span> <span class="mi">276</span>
+<span class="n">Server</span> <span class="n">version</span><span class="p">:</span> <span class="mf">8.0</span><span class="o">.</span><span class="mi">15</span> <span class="n">Homebrew</span>
+
+<span class="n">Copyright</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">2019</span><span class="p">,</span> <span class="n">Oracle</span> <span class="ow">and</span><span class="o">/</span><span class="ow">or</span> <span class="n">its</span> <span class="n">affiliates</span><span class="o">.</span> <span class="n">All</span> <span class="n">rights</span> <span class="n">reserved</span><span class="o">.</span>
+
+<span class="n">Oracle</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">registered</span> <span class="n">trademark</span> <span class="n">of</span> <span class="n">Oracle</span> <span class="n">Corporation</span> <span class="ow">and</span><span class="o">/</span><span class="ow">or</span> <span class="n">its</span>
+<span class="n">affiliates</span><span class="o">.</span> <span class="n">Other</span> <span class="n">names</span> <span class="n">may</span> <span class="n">be</span> <span class="n">trademarks</span> <span class="n">of</span> <span class="n">their</span> <span class="n">respective</span>
+<span class="n">owners</span><span class="o">.</span>
+
+<span class="n">Type</span> <span class="s1">&#39;help;&#39;</span> <span class="ow">or</span> <span class="s1">&#39;\h&#39;</span> <span class="k">for</span> <span class="n">help</span><span class="o">.</span> <span class="n">Type</span> <span class="s1">&#39;\c&#39;</span> <span class="n">to</span> <span class="n">clear</span> <span class="n">the</span> <span class="n">current</span> <span class="nb">input</span> <span class="n">statement</span><span class="o">.</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>To see the existing databases you can use the following command:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SHOW</span> <span class="n">DATABASES</span>
+</pre></div>
+</div>
+<p>you can also see the users and the relevant hosts using the following command</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">user</span><span class="p">,</span> <span class="k">host</span> <span class="k">FROM</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>We will need to create a new database for the following sections. So let’s start by creating a new database called <code class="docutils literal notranslate"><span class="pre">airflowdb</span></code>:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span> <span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">airflowdb</span> <span class="nb">CHARACTER</span> <span class="k">SET</span> <span class="n">utf8</span> <span class="k">COLLATE</span> <span class="n">utf8_unicode_ci</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>as well as creating a corresponding user:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">USER</span> <span class="s1">&#39;airflow&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s1">&#39;password&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>make sure to substitute <code class="docutils literal notranslate"><span class="pre">password</span></code> with an actual password.
+For this tutorial let’s assume the password is <code class="docutils literal notranslate"><span class="pre">python2019</span></code>.</p>
+<p>Now we need to make sure that the <code class="docutils literal notranslate"><span class="pre">airflow</span></code> user has access to the databases:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">PRIVILEGES</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">TO</span> <span class="s1">&#39;airflow&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="n">FLUSH</span> <span class="k">PRIVILEGES</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>If you want to restrict the access of this user to the <code class="docutils literal notranslate"><span class="pre">airflowdb</span></code> database, for example, you can do it via:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">PRIVILEGES</span> <span class="k">ON</span> <span class="n">airflowdb</span><span class="p">.</span><span class="o">*</span> <span class="k">To</span> <span class="s1">&#39;airflow&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="n">FLUSH</span> <span class="k">PRIVILEGES</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>so now the output of <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">user,</span> <span class="pre">host</span> <span class="pre">FROM</span> <span class="pre">mysql.user;</span></code> should look like this:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">user</span><span class="p">,</span> <span class="k">host</span> <span class="k">FROM</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">------------------+-----------+</span>
+<span class="o">|</span> <span class="k">user</span>             <span class="o">|</span> <span class="k">host</span>      <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------------+-----------+</span>
+<span class="o">|</span> <span class="n">airflow</span>          <span class="o">|</span> <span class="n">localhost</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">mysql</span><span class="p">.</span><span class="n">infoschema</span> <span class="o">|</span> <span class="n">localhost</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">mysql</span><span class="p">.</span><span class="k">session</span>    <span class="o">|</span> <span class="n">localhost</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">mysql</span><span class="p">.</span><span class="n">sys</span>        <span class="o">|</span> <span class="n">localhost</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">root</span>             <span class="o">|</span> <span class="n">localhost</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------------+-----------+</span>
+<span class="mi">5</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>if you need to remove a user you can use the following command:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">DROP</span> <span class="k">USER</span> <span class="s1">&#39;&lt;username&gt;&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span> <span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="checking-connection-to-the-database-from-python">
+<h3>🚦Checking connection to the database from Python<a class="headerlink" href="#checking-connection-to-the-database-from-python" title="Permalink to this headline">¶</a></h3>
+<p>The following snippet will allow you to connect to the created database from Python:</p>
+<p>Note that you need the database name, password, and user for this.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Script to check the connection to the database we created earlier airflowdb</span>
+
+<span class="c1"># importing the connector from mysqlclient</span>
+<span class="kn">import</span> <span class="nn">mysql.connector</span> <span class="kn">as</span> <span class="nn">mysql</span>
+
+<span class="c1"># connecting to the database using the connect() method</span>
+<span class="c1"># it takes 3 parameters: user, host, and password</span>
+
+<span class="n">dbconnect</span> <span class="o">=</span> <span class="n">mysql</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> 
+                          <span class="n">user</span><span class="o">=</span><span class="s2">&quot;airflow&quot;</span><span class="p">,</span> 
+                          <span class="n">password</span><span class="o">=</span><span class="s2">&quot;python2019&quot;</span><span class="p">,</span> 
+                          <span class="n">db</span><span class="o">=</span><span class="s2">&quot;airflowdb&quot;</span><span class="p">)</span>
+
+<span class="c1"># print the connection object</span>
+<span class="k">print</span><span class="p">(</span><span class="n">dbconnect</span><span class="p">)</span>
+
+<span class="c1"># do not forget to close the connection</span>
+<span class="n">dbconnect</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">dbconnect</span></code> is a  connection object which can be used to execute queries, commit transactions and rollback transactions before closing the connection. We will use it later.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">dbconnect.close()</span></code> method is used to close the connection to database. To perform further transactions, we need to create a new connection.</p>
+</div>
+<div class="section" id="streaming-twitter-data-into-the-database">
+<h3>Streaming Twitter data into the database<a class="headerlink" href="#streaming-twitter-data-into-the-database" title="Permalink to this headline">¶</a></h3>
+<p>We are going to create a Python script that helps us to achieve the following:</p>
+<ol class="simple">
+<li><p>Create a class to connect to the Twitter API</p></li>
+<li><p>Connect our database and reads the data into the correct columns</p></li>
+</ol>
+<p>We will be using the Tweepy library for this (docs here <a class="reference external" href="https://tweepy.readthedocs.io/en/latest/">https://tweepy.readthedocs.io/en/latest/</a>)
+.</p>
+<p>Let’s start with an example to collect some Tweets from your public timeline
+(for details on the Tweet object visit <a class="reference external" href="https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/intro-to-tweet-json#tweetobject">the API docs</a>)</p>
+<p>🚦 The first step will be to create a config file (<code class="docutils literal notranslate"><span class="pre">config.cfg</span></code>) with your Twitter API tokens.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">twitter</span><span class="p">]</span>
+<span class="n">consumer_key</span> <span class="o">=</span> <span class="n">xxxxxxxxxxxxxxxxxx</span>
+<span class="n">consumer_secret</span> <span class="o">=</span> <span class="n">xxxxxxxxxxxxxxxxxx</span> 
+<span class="n">access_token</span> <span class="o">=</span> <span class="n">xxxxxxxxxxxxxxxxxx</span>
+<span class="n">access_token_secret</span> <span class="o">=</span> <span class="n">xxxxxxxxxxxxxxxxxx</span> 
+</pre></div>
+</div>
+<p>Now to the coding bits:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import libraries needed</span>
+<span class="kn">from</span> <span class="nn">configparser</span> <span class="kn">import</span> <span class="n">ConfigParser</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">tweepy</span>
+
+<span class="c1"># Path to the config file with the keys make sure not to commit this file</span>
+<span class="n">CONFIG_FILE</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;config.cfg&quot;</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="p">()</span>
+<span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">CONFIG_FILE</span><span class="p">)</span>
+
+<span class="c1"># Authenticate to Twitter</span>
+<span class="n">auth</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">OAuthHandler</span><span class="p">(</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;twitter&quot;</span><span class="p">,</span> <span class="s2">&quot;consumer_key&quot;</span><span class="p">),</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;twitter&quot;</span><span class="p">,</span> <span class="s2">&quot;consumer_secret&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">auth</span><span class="o">.</span><span class="n">set_access_token</span><span class="p">(</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;twitter&quot;</span><span class="p">,</span> <span class="s2">&quot;access_token&quot;</span><span class="p">),</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;twitter&quot;</span><span class="p">,</span> <span class="s2">&quot;access_token_secret&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># Create Twitter API object</span>
+<span class="n">twitter</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">API</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span>
+
+<span class="c1"># let&#39;s collect some of the tweets in your public timeline</span>
+<span class="n">public_tweets</span> <span class="o">=</span> <span class="n">twitter</span><span class="o">.</span><span class="n">home_timeline</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">public_tweets</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">tweet</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-a-new-table">
+<h3>🚦 Create a new table<a class="headerlink" href="#create-a-new-table" title="Permalink to this headline">¶</a></h3>
+<p>Let us create a folder called <code class="docutils literal notranslate"><span class="pre">etl-basic</span></code> and a <code class="docutils literal notranslate"><span class="pre">stream_twitter.py</span></code> script in it.</p>
+<p>We are going to create a SQL table to save the tweets to.
+This table will contain the following:</p>
+<ul class="simple">
+<li><p>username</p></li>
+<li><p>tweet content</p></li>
+<li><p>time of creation</p></li>
+<li><p>retweet count</p></li>
+<li><p>unique tweet id</p></li>
+</ul>
+<p>This corresponds to 5 columns and the primary key.</p>
+<p>We already know how to connect to a database:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mysql</span> <span class="kn">import</span> <span class="n">connector</span> <span class="k">as</span> <span class="n">mysql</span>
+
+<span class="c1"># Details for our MySql connection</span>
+<span class="n">DATABASE</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="s2">&quot;airflow&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;python2019&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;db&quot;</span><span class="p">:</span> <span class="s2">&quot;airflowdb&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># ----------------------------------------------</span>
+<span class="c1">#  Database related functions</span>
+<span class="c1"># ----------------------------------------------</span>
+
+
+<span class="k">def</span> <span class="nf">connect_db</span><span class="p">(</span><span class="n">my_database</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Connect to a given my_database</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        my_database(dict): dictionary with the my_database details</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        dbconnect: MySql my_database connection object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">dbconnect</span> <span class="o">=</span> <span class="n">mysql</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="n">host</span><span class="o">=</span><span class="n">my_database</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;host&quot;</span><span class="p">),</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">my_database</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">),</span>
+            <span class="n">password</span><span class="o">=</span><span class="n">my_database</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;password&quot;</span><span class="p">),</span>
+            <span class="n">db</span><span class="o">=</span><span class="n">my_database</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;db&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;connected&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dbconnect</span>
+    <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we need to write a function to create the table</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_table</span><span class="p">(</span><span class="n">my_database</span><span class="p">,</span> <span class="n">new_table</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create new table in a my_database</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        my_database (dict): details for the db</span>
+<span class="sd">        new_table (str): name of the table to create</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dbconnect</span> <span class="o">=</span> <span class="n">connect_db</span><span class="p">(</span><span class="n">my_database</span><span class="p">)</span>
+
+    <span class="c1"># create a cursor for the queries</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">dbconnect</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;USE airflowdb&quot;</span><span class="p">)</span>
+
+    <span class="c1"># here we delete the table, it can be kept or else</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;DROP TABLE IF EXISTS {new_table}&quot;</span><span class="p">)</span>
+
+    <span class="c1"># these matches the Twitter data</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">f</span><span class="s2">&quot;CREATE TABLE `{new_table}` (&quot;</span>
+        <span class="s2">&quot;  `id` INT(11) NOT NULL AUTO_INCREMENT,&quot;</span>
+        <span class="s2">&quot;  `user` varchar(100) NOT NULL ,&quot;</span>
+        <span class="s2">&quot;  `created_at` timestamp,&quot;</span>
+        <span class="s2">&quot;  `tweet` varchar(255) NOT NULL,&quot;</span>
+        <span class="s2">&quot;  `retweet_count` int(11) ,&quot;</span>
+        <span class="s2">&quot;  `id_str` varchar(100),&quot;</span>
+        <span class="s2">&quot;  PRIMARY KEY (`id`))&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="n">dbconnect</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Created {new_table} table&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="collect-tweets">
+<h3>🚦 Collect Tweets<a class="headerlink" href="#collect-tweets" title="Permalink to this headline">¶</a></h3>
+<p>The Twitter Streaming API has <a class="reference external" href="https://dev.twitter.com/streaming/overview/connecting">rate limits</a> and prohibits too many connection attempts happening too quickly. It also prevents too many connections being made to it using the same authorization keys. Thankfully, tweepy takes care of these details for us, and we can focus on our program.</p>
+<p>The main thing that we have to be aware of is the queue of tweets that we’re processing. If we take too long to process tweets, they will start to get queued, and Twitter may disconnect us. This means that processing each tweet needs to be extremely fast.</p>
+<p>Let’s us transform the connection script we created before:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import libraries needed</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">configparser</span> <span class="kn">import</span> <span class="n">ConfigParser</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">tweepy</span>
+<span class="kn">from</span> <span class="nn">dateutil</span> <span class="kn">import</span> <span class="n">parser</span>
+<span class="kn">from</span> <span class="nn">mysql</span> <span class="kn">import</span> <span class="n">connector</span> <span class="k">as</span> <span class="n">mysql</span>
+
+<span class="c1"># Path to the config file with the keys make sure not to commit this file</span>
+<span class="n">CONFIG_FILE</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;config.cfg&quot;</span>
+
+<span class="k">def</span> <span class="nf">connectTwitter</span><span class="p">():</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="p">()</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">CONFIG_FILE</span><span class="p">)</span>
+
+    <span class="c1">#  complete the part to Authenticate to Twitter</span>
+    
+
+    <span class="c1"># Create Twitter API object</span>
+    <span class="n">twitter</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">API</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">wait_on_rate_limit</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">wait_on_rate_limit_notify</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;🦄 Connected as {twitter.me().screen_name}&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">twitter</span>
+</pre></div>
+</div>
+<p>The next step is to create a stream listener.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">StreamListener</span></code> class has a method called on_data. This method will automatically figure out what kind of data Twitter sent, and call an appropriate method to deal with the specific data type. It’s possible to deal with events like users sending direct messages, tweets being deleted, and more.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">customListener</span><span class="p">(</span><span class="n">tweepy</span><span class="o">.</span><span class="n">StreamListener</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;We need to create an instance of the Stream Listener</span>
+<span class="sd">    http://docs.tweepy.org/en/v3.4.0/streaming_how_to.html      </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">on_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status_code</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">status_code</span> <span class="o">==</span> <span class="mi">420</span><span class="p">:</span>
+            <span class="c1"># returning False in on_data disconnects the stream</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">def</span> <span class="nf">on_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">on_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Automatic detection of the kind of data collected from Twitter</span>
+<span class="sd">        This method reads in tweet data as JSON and extracts the data we want.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># parse as json</span>
+            <span class="n">raw_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="c1"># extract the relevant data</span>
+            <span class="k">if</span> <span class="s2">&quot;text&quot;</span> <span class="ow">in</span> <span class="n">raw_data</span><span class="p">:</span>
+                <span class="n">user</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">][</span><span class="s2">&quot;screen_name&quot;</span><span class="p">]</span>
+                <span class="n">created_at</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">raw_data</span><span class="p">[</span><span class="s2">&quot;created_at&quot;</span><span class="p">])</span>
+                <span class="n">tweet</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
+                <span class="n">retweet_count</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[</span><span class="s2">&quot;retweet_count&quot;</span><span class="p">]</span>
+                <span class="n">id_str</span> <span class="o">=</span> <span class="n">raw_data</span><span class="p">[</span><span class="s2">&quot;id_str&quot;</span><span class="p">]</span>
+
+            <span class="c1"># insert data just collected into MySQL my_database</span>
+            <span class="n">populate_table</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">created_at</span><span class="p">,</span> <span class="n">tweet</span><span class="p">,</span> <span class="n">retweet_count</span><span class="p">,</span> <span class="n">id_str</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Tweet colleted at: {created_at}&quot;</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>🚦 In pairs discuss how you would create the <code class="docutils literal notranslate"><span class="pre">populate_table</span></code> function</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">populate_table</span><span class="p">(</span>
+    <span class="n">user</span><span class="p">,</span> <span class="n">created_at</span><span class="p">,</span> <span class="n">tweet</span><span class="p">,</span> <span class="n">retweet_count</span><span class="p">,</span> <span class="n">id_str</span><span class="p">,</span> <span class="n">my_database</span><span class="o">=</span><span class="n">DATABASE</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Populate a given table witht he Twitter collected data</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        user (str): username from the status</span>
+<span class="sd">        created_at (datetime): when the tweet was created</span>
+<span class="sd">        tweet (str): text</span>
+<span class="sd">        retweet_count (int): number of retweets</span>
+<span class="sd">        id_str (int): unique id for the tweet</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dbconnect</span> <span class="o">=</span> <span class="n">connect_db</span><span class="p">(</span><span class="n">DATABASE</span><span class="p">)</span>
+
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">dbconnect</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;USE airflowdb&quot;</span><span class="p">)</span>
+
+    <span class="c1"># add content here</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># what is missing? </span>
+        <span class="n">commit</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;commited&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="n">mysql</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="n">dbconnect</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+
+    <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">dbconnect</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span>
+</pre></div>
+</div>
+<p>🚦 For this to be called we need to wrap around a main function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># complete the main function</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    
+    <span class="n">create_table</span><span class="p">(</span><span class="n">DATABASE</span><span class="p">,</span> <span class="s2">&quot;tweets&quot;</span><span class="p">)</span>
+    <span class="c1"># first we need to authenticate</span>
+    <span class="n">twitter</span> <span class="o">=</span> <span class="n">connectTwitter</span><span class="p">()</span>
+
+    <span class="c1"># next: create stream listener</span>
+    <span class="n">myStreamListener</span> <span class="o">=</span> <span class="n">customListener</span><span class="p">()</span>
+    <span class="n">myStream</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">Stream</span><span class="p">(</span><span class="n">auth</span><span class="o">=</span><span class="n">twitter</span><span class="o">.</span><span class="n">auth</span><span class="p">,</span> <span class="n">listener</span><span class="o">=</span><span class="n">myStreamListener</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+    <span class="c1"># stream tweets using the filter method</span>
+    <span class="n">start_stream</span><span class="p">(</span><span class="n">myStream</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;python&quot;</span><span class="p">,</span> <span class="s2">&quot;pycon&quot;</span><span class="p">,</span> <span class="s2">&quot;jupyter&quot;</span><span class="p">,</span> <span class="s2">&quot;#pycon2019&quot;</span><span class="p">],</span> <span class="n">async</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>📝 Solutions at: <a class="reference external" href="https://github.com/trallard/airflow-tutorial/solutions">https://github.com/trallard/airflow-tutorial/solutions</a></p>
+</div>
+<div class="section" id="extending-your-data-pipeline">
+<h3>Extending your data pipeline<a class="headerlink" href="#extending-your-data-pipeline" title="Permalink to this headline">¶</a></h3>
+<p>🚀 So far we have collected some data through streaming (enough to collect some data). And created a database where this data is going to be deposited into.</p>
+<p>The next step is to transform the data and prepare it for more downstream processes.</p>
+<p>There are different mechanisms to share data between pipeline steps:</p>
+<ul class="simple">
+<li><p>files</p></li>
+<li><p>databases</p></li>
+<li><p>queues</p></li>
+</ul>
+<p>In each case, we need a way to get data from the current step to the next step.</p>
+<p>🚦 The next step would be to add some ‘transformation’ steps to the data set.</p>
+<p>Modify your <code class="docutils literal notranslate"><span class="pre">stream_twitter.py</span></code> so that the table contains also: language, follower count and country.</p>
+<p>Now let’s create a script called <code class="docutils literal notranslate"><span class="pre">analyse_twitter.py</span></code></p>
+<p>This script will do the following:</p>
+<ul class="simple">
+<li><p>Load the table into a pandas dataframe</p></li>
+<li><p>Clean the data: lowercase usernames, remove RT</p></li>
+<li><p>Create a plot from the data</p></li>
+<li><p>Save the plot and a csv with the clean data</p></li>
+</ul>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">mysql.connector</span> <span class="kn">as</span> <span class="nn">mysql</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="c1"># import the previously created functions</span>
+<span class="kn">from</span> <span class="nn">stream_twitter</span> <span class="kn">import</span> <span class="n">connect_db</span>
+
+<span class="c1"># Details for our MySql connection</span>
+<span class="n">DATABASE</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="s2">&quot;airflow&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;python2019&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;db&quot;</span><span class="p">:</span> <span class="s2">&quot;airflowdb&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># ----------------------------------------------</span>
+<span class="c1">#  Database related functions</span>
+<span class="c1"># ----------------------------------------------</span>
+
+
+<span class="k">def</span> <span class="nf">sql_to_csv</span><span class="p">(</span><span class="n">my_database</span><span class="p">,</span> <span class="n">my_table</span><span class="p">):</span>
+
+    <span class="n">dbconnect</span> <span class="o">=</span> <span class="n">connect_db</span><span class="p">(</span><span class="n">my_database</span><span class="p">)</span>
+
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">dbconnect</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+    <span class="n">query</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;SELECT * FROM {table}&quot;</span>
+    <span class="n">all_tweets</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">dbconnect</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;./data&quot;</span><span class="p">):</span>
+        <span class="n">all_tweets</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;./data/raw_tweets.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s2">&quot;./data&quot;</span><span class="p">)</span>
+        <span class="n">all_tweets</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;./data/raw_tweets.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">sql_to_df</span><span class="p">(</span><span class="n">my_database</span><span class="p">,</span> <span class="n">my_table</span><span class="p">):</span>
+    <span class="n">dbconnect</span> <span class="o">=</span> <span class="n">connect_db</span><span class="p">(</span><span class="n">my_database</span><span class="p">)</span>
+
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">dbconnect</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+    <span class="n">query</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;SELECT * FROM {my_table}&quot;</span>
+
+    <span class="c1"># store in data frame</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">dbconnect</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+
+    <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">dbconnect</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># ----------------------------------------------</span>
+<span class="c1">#  Data processing</span>
+<span class="c1"># ----------------------------------------------</span>
+
+
+<span class="k">def</span> <span class="nf">clean_data</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+
+    <span class="c1"># Make all usernames lowercase</span>
+    <span class="n">clean_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">clean_df</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="c1"># keep only non RT</span>
+    <span class="n">clean_df</span> <span class="o">=</span> <span class="n">clean_df</span><span class="p">[</span><span class="o">~</span><span class="n">clean_df</span><span class="p">[</span><span class="s2">&quot;tweet&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;RT&quot;</span><span class="p">)]</span>
+
+    <span class="k">return</span> <span class="n">clean_df</span>
+
+
+<span class="k">def</span> <span class="nf">create_plots</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;language&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="n">countries</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;language&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">countries</span><span class="p">)),</span> <span class="n">countries</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Language counts&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;languages&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;./plots&quot;</span><span class="p">):</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;./plots/barchart_lang.png&quot;</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s2">&quot;./plots&quot;</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;./plots/barchart_lang.png&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">save_df</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="n">today</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">&quot;./data&quot;</span><span class="p">):</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;./data/{today}-clean-df.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="s2">&quot;./data&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;./data/{today}-clean-df.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">sql_to_df</span><span class="p">(</span><span class="n">DATABASE</span><span class="p">,</span> <span class="s2">&quot;tweets_long&quot;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Database loaded in df&quot;</span><span class="p">)</span>
+
+    <span class="n">clean_df</span> <span class="o">=</span> <span class="n">clean_data</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+    <span class="n">create_plots</span><span class="p">(</span><span class="n">clean_df</span><span class="p">)</span>
+
+    <span class="n">save_df</span><span class="p">(</span><span class="n">clean_df</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>🚦In pairs discuss:</p>
+<ul class="simple">
+<li><p>How would you run the two scripts together?</p></li>
+<li><p>Try and create the pipeline: <code class="docutils literal notranslate"><span class="pre">stream_twitter.py</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">analyse_twitter.py</span></code></p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="about.html" title="Previous document">About the workshop</a>
+        </li>
+        <li>
+          <a href="airflow-intro.html" title="Next document">Airflow basics</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/python.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">a.k.a an introduction to all things DAGS and pipelines joy</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=trallard&repo=airflow-tutorial&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Pipelines</a><ul>
+<li><a class="reference internal" href="#steps-to-automation">Steps to automation</a></li>
+<li><a class="reference internal" href="#what-is-a-data-pipeline">What is a data pipeline?</a></li>
+<li><a class="reference internal" href="#why-do-pipelines-matter">Why do pipelines matter?</a><ul>
+<li><a class="reference internal" href="#good-data-pipelines-are">Good data pipelines are:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-your-first-etl-pipeline-in-python">⭐️ Creating your first ETL pipeline in Python</a><ul>
+<li><a class="reference internal" href="#setting-your-local-database">Setting your local database</a></li>
+<li><a class="reference internal" href="#checking-connection-to-the-database-from-python">🚦Checking connection to the database from Python</a></li>
+<li><a class="reference internal" href="#streaming-twitter-data-into-the-database">Streaming Twitter data into the database</a></li>
+<li><a class="reference internal" href="#create-a-new-table">🚦 Create a new table</a></li>
+<li><a class="reference internal" href="#collect-tweets">🚦 Collect Tweets</a></li>
+<li><a class="reference internal" href="#extending-your-data-pipeline">Extending your data pipeline</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About the workshop</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#steps-to-automation">Steps to automation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-a-data-pipeline">What is a data pipeline?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#why-do-pipelines-matter">Why do pipelines matter?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-your-first-etl-pipeline-in-python">⭐️ Creating your first ETL pipeline in Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="airflow-intro.html">Airflow basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first-airflow.html">Airflow 101: working locally and familiarise with the tool</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="about.html" title="previous chapter">About the workshop</a></li>
+      <li>Next: <a href="airflow-intro.html" title="next chapter">Airflow basics</a></li>
+  </ul></li>
+</ul>
+</div><p><iframe src="https://ghbtns.com/github-btn.html?user=trallard&type=follow&count=false" allowtransparency="true"
+        frameborder="0" scrolling="0" width="200" height="20"></iframe></p>
+
+<p><a href="https://twitter.com/ixek" class="twitter-follow-button" data-show-count="false">Follow @ixek</a>
+    <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + '://platform.twitter.com/widgets.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'twitter-wjs');</script>
+</p>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Tania Allard.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/pipelines.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
