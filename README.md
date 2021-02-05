@@ -22,7 +22,7 @@ If you are interested in following along visit: <https://airflow-tutorial.readth
 
 The setup instructions can be found at: [https://airflow-tutorial.readthedocs.io/en/latest/setup.html](https://airflow-tutorial.readthedocs.io/en/latest/setup.html)
 
-If you would like to experiment with Azure [follow this link](https://azure.microsoft.com/en-us/free//?wt.mc_id=PyCon-github-taallard) to get a free trial subscription with 150 dollars.
+If you would like to experiment with Azure [follow this link](https://azure.microsoft.com/free//?WT.mc_id=academic-0000-taallard) to get a free trial subscription with 150 dollars.
 
 
 🚀 PRs and Issues are welcome
