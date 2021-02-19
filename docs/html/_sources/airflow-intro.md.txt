@@ -125,7 +125,7 @@ run_this = PythonOperator(
 
 ### Airflow
 - Airbnb data team
-- Open-sourced mud 2015
+- Open-sourced mid 2015
 - Apache incubator mid-2016
 - ETL pipelines
 
