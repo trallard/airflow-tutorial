@@ -111,7 +111,7 @@ pyzmq==18.0.1
 qtconsole==4.4.3
 requests-oauthlib==1.2.0
 requests==2.21.0
-rsa==4.0
+rsa==4.1
 scipy==1.2.1
 seaborn==0.9.0
 send2trash==1.5.0
