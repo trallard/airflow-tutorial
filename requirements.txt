@@ -67,7 +67,7 @@ kiwisolver==1.1.0
 kombu==4.5.0
 kubernetes==9.0.0
 lockfile==0.12.2
-lxml==4.3.3
+lxml==4.9.1
 mako==1.0.9
 markdown==2.6.11
 markupsafe==1.1.1
