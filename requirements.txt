@@ -28,7 +28,7 @@ dill==0.2.9
 docutils==0.14
 entrypoints==0.3
 flask-admin==1.5.3
-flask-appbuilder==1.12.3
+flask-appbuilder==4.1.3
 flask-babel==0.12.2
 flask-bcrypt==0.7.1
 flask-caching==1.3.3
