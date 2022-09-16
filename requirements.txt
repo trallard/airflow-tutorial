@@ -68,7 +68,7 @@ kombu==4.5.0
 kubernetes==9.0.0
 lockfile==0.12.2
 lxml==4.3.3
-mako==1.0.9
+mako==1.2.2
 markdown==2.6.11
 markupsafe==1.1.1
 matplotlib==3.0.3
