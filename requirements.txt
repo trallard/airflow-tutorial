@@ -90,7 +90,7 @@ pexpect==4.7.0 ; sys_platform != 'win32'
 pickleshare==0.7.5
 prometheus-client==0.6.0
 prompt-toolkit==2.0.9
-protobuf==3.7.1
+protobuf==3.18.3
 psutil==5.6.2
 ptyprocess==0.6.0 ; os_name != 'nt'
 pyasn1-modules==0.2.5
